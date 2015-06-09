@@ -26,8 +26,11 @@ $ npm install {Module_name} # e.g) jquery 모듈설치: npm i jquery
 -
 
 #### Node.js 환경변수 설정
-동일한 강의장을 사용하는 `JAVA & Android` 수업 환경으로 인해<br>
-의도치 않게 발생한 문제 해결을 위한 환경변수 설정 방법
+
+설치한 nodejs 폴더를 다른 곳으로 옮길 경우, 환경변수 설정이 필요합니다.
+예로 동일한 강의장을 사용하는 `JAVA & Android` 수업 환경으로 발생한
+Git Bash에서 `node` 명령을 사용할 수 없는 문제 해결을 위해 환경변수를
+올바르게 설정 변경해야 합니다.
 
 ∨
 
@@ -41,25 +44,27 @@ $ npm install {Module_name} # e.g) jquery 모듈설치: npm i jquery
 
 -
 
+**Node.js 폴더 경로 복사**
+
+nodejs 폴더의 경로를 마우스로 선택한 후, 오른쪽 버튼을 눌러 `주소복사` 선택<br>
+`e.g) nodejs 폴더가 설치 이후, 변경된 경우`
+
+![Node.js 경로](GUIDE/node-04.jpg)
+
+-
+
 **환경변수 설정 Part.1**
 
 `제어판` > `고급 시스템 설정` > `시스템 속성(고급)` > `환경변수`
 
 ![제어판 > 고급 시스템 설정 > 시스템 속성(고급) > 환경변수](GUIDE/node-02.jpg)
 
--
-
-**Node.js 폴더 경로 복사**
-
-nodejs 폴더의 경로를 마우스로 선택한 후, 오른쪽 버튼을 눌러 `주소복사` 선택
-
-![Node.js 경로](GUIDE/node-04.jpg)
 
 -
 
 **환경변수 설정 Part.2**
 
-`환경변수` > `사용자 변수` > `path` > `편집` > `Node.js 폴더 경로 추가`
+`환경변수` > `사용자 변수` > `path` > `편집` > `Node.js 폴더 경로 추가` > `확인`
 
 ![환경변수 > 사용자 변수 path > 편집 > Node.js 경로](GUIDE/node-03.jpg)
 
