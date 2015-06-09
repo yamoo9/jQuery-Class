@@ -27,9 +27,9 @@ $ npm install {Module_name} # e.g) jquery 모듈설치: npm i jquery
 
 #### Node.js 환경변수 설정
 
-설치한 nodejs 폴더를 다른 곳으로 옮길 경우, 환경변수 설정이 필요합니다.<br>
-예로 동일한 강의장을 사용하는 `JAVA & Android` 수업 환경으로 발생한<br>
-Git Bash에서 `node` 명령을 사용할 수 없는 문제 해결을 위해 환경변수를<br>
+설치한 nodejs 폴더를 다른 곳으로 옮길 경우, 환경변수 설정이 필요합니다.
+예로 동일한 강의장을 사용하는 `JAVA & Android` 수업 환경으로 발생한
+Git Bash에서 `node` 명령을 사용할 수 없는 문제 해결을 위해 환경변수를
 올바르게 설정 변경해야 합니다.
 
 ∨
