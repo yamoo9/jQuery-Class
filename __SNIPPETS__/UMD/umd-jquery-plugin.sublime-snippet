@@ -1,0 +1,20 @@
+<snippet>
+	<content><![CDATA[// CommonJS, AMD, 웹 브라우저 글로벌 객체로 jQuery 플러그인 생성하는 방법.
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD 환경
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS 환경
+        module.exports = factory(require('jquery'));
+    } else {
+        // 웹 브라우저 전역객체
+        factory(jQuery);
+    }
+}(function (\$) {
+	${1:// 플러그인 코드}
+}));]]></content>
+	<tabTrigger>umd-jquery-plugin</tabTrigger>
+	<scope>source.js</scope>
+	<description>UMD - jQuery 플러그인 코드</description>
+</snippet>

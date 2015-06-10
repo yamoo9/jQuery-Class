@@ -1,74 +1,75 @@
 ## 웹 접근성을 고려한 jQuery 플러그인 제작 과정
 
-#### 1일차 "Git & Node.js 환경 구성"
-
-* [Git](http://git-scm.com/) 설치 : **Git Bash** 명령어 툴 활용<br>
-```sh
-$ git --version # 설치된 Git 버전 체크
-```
-
-* **.gitignore** 파일의 역할 - 버전 관리하고싶지 않은 폴더/파일 설정
-
-* [GitHub](http://github.com/) 무료 계정 등록 및 [GUI 툴](http://windows.github.com) 설치/활용
-
-* [Node.js](http://nodejs.org/) 설치
-```sh
-$ node --version # 설치된 Node 버전 체크
-```
-
-* [NPM](http://npmjs.org/) 모듈 설치/관리
-```sh
-# NPM을 활용한 Node.js 모듈 설치
-$ npm -v # npm --version
-$ npm install {Module_name} # e.g) jquery 모듈설치: npm i jquery
-```
-
--
-
-#### Node.js 환경변수 설정
-
-설치한 nodejs 폴더를 다른 곳으로 옮길 경우, 환경변수 설정이 필요합니다.
-예로 동일한 강의장을 사용하는 `JAVA & Android` 수업 환경으로 발생한
-Git Bash에서 `node` 명령을 사용할 수 없는 문제 해결을 위해 환경변수를
-올바르게 설정 변경해야 합니다.
-
-∨
-
-**수업 시간에 기본 설치한 nodejs 폴더 내부 파일 구성**
-
-* `node.exe` - Node.js 실행 파일. 환경변수에 추가하면 어디서나 Node.js 수행 가능.
-* `npm.cmd` - Node.js 모듈 설치 시, 사용하는 NPM 실행 파일.
-* `node_modules` - Node.js 모듈이 설치되는 디렉토리.
-
-![Node.js 설치 파일 구성](GUIDE/node-01.jpg)
-
--
-
-**Node.js 폴더 경로 복사**
-
-nodejs 폴더의 경로를 마우스로 선택한 후, 오른쪽 버튼을 눌러 `주소복사` 선택<br>
-`e.g) nodejs 폴더가 설치 이후, 변경된 경우`
-
-![Node.js 경로](GUIDE/node-04.jpg)
-
--
-
-**환경변수 설정 Part.1**
-
-`제어판` > `고급 시스템 설정` > `시스템 속성(고급)` > `환경변수`
-
-![제어판 > 고급 시스템 설정 > 시스템 속성(고급) > 환경변수](GUIDE/node-02.jpg)
-
-
--
-
-**환경변수 설정 Part.2**
-
-`환경변수` > `사용자 변수` > `path` > `편집` > `Node.js 폴더 경로 추가` > `확인`
-
-![환경변수 > 사용자 변수 path > 편집 > Node.js 경로](GUIDE/node-03.jpg)
-
-
-<!-- [Node.js 사용자 환경변수 추가](http://combatguri.tistory.com/m/post/11) -->
+- [1일차 내용 요약](DOC/DAY01.md)
 
 ---
+
+### 2일차 "JS 모듈 관리(Javascript Modules Management)"
+
+이번 시간에는 Javascript 관리와 성능을 향상시키지 위한 모듈 관리방법에 대해 알아보고<br>
+Client/Server Side Javascript 표준화를 위한 [CommonJS](http://en.wikipedia.org/wiki/CommonJS), [AMD](http://en.wikipedia.org/wiki/Asynchronous_module_definition)에 대해 공부합니다.<br>
+익히 잘 알려진 모듈 관리도구로는 `Require.js`와 `Browserify`가 있습니다.
+
+- [＞ Require.js](DOC/module-loader/requirejs.md)
+- [＞ Browserify](DOC/module-loader/browserify.md)
+
+-
+
+### 모듈 관리도구 - 현재 트랜드 체크!
+
+[Google 트렌드 자료](http://www.google.com/trends/explore#q=require.js%2C%20Browserify&date=1%2F2011%2054m&cmpt=q&tz=)를 살펴보면 2014년 이후부터 `Require.js` 보다 `Browserify` 검색량이 급증.
+
+![구글 트렌드: 시간 흐름에 따른 관심도 변화](GUIDE/compare-requirejs-vs-browserify.png)
+
+-
+
+### 프론드-엔드 개발자로서 요구되는 능력
+
+[![Front-End Developer Infographic](GUIDE/life-of-front-end-developer-infographic-Secondary.jpg)](http://www.skilledup.com/articles/life-front-end-web-developer-infographic)
+
+#### 고려해야 할 목표
+- 접근성
+- 사용성
+- 성능 향상
+
+#### 요구되는 테크닉
+
+- **가이드라인**
+	- 접근성
+	- 검색엔진최적화(SEO)
+	- UX 사용성 모델
+
+- **웹 언어**
+	- HTML
+	- CSS
+	- Javascript
+
+- **라이브러리**
+	- jQuery
+	- Underscore
+	- Modernizr
+
+- **이미지 편집**
+	- Photoshop
+	- Illustrator
+
+- **프리프로세싱 & 컴파일러**
+	- CSS
+		- Sass
+		- LESS
+	- JS
+		- CoffeeScript
+		- TypeScript
+
+- **모듈 관리**
+	- requireJS
+	- Browerify
+
+- **업무 관리도구**
+	- Gulp
+	- Grunt
+
+- **클라이언트 사이드 MVC 프레임워크**
+	- Angular
+	- Backbone
+
