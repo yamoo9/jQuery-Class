@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[define(${1:id}, [${2:dependencies}], function($3) {
+	${0:// 모듈코드}
+});]]></content>
+	<tabTrigger>amd-define</tabTrigger>
+	<scope>source.js</scope>
+	<description>AMD - define()</description>
+</snippet>

@@ -1,0 +1,16 @@
+<snippet>
+    <content><![CDATA[({
+    name: "${1:main}",
+    baseUrl: "${2:./js/}",
+    paths: { requireLib: "${3:libs/require}" },
+    include: ["requireLib"],
+    mainConfigFile: "${4:./js/main.js}",
+    out: "${5:../build/js/main-opt.min.js}",
+    optimize: "${6:uglify2}",
+    generateSourceMaps: ${7:false},
+    preserveLicenseComments: ${8:true}
+})]]></content>
+    <tabTrigger>rjs-config</tabTrigger>
+    <scope>source.js</scope>
+    <description>r.js - config</description>
+</snippet>

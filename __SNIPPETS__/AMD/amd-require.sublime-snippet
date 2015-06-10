@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[require([${1:dependencies}], function($2) {
+	$0
+});]]></content>
+	<tabTrigger>amd-require</tabTrigger>
+	<scope>source.js</scope>
+	<description>AMD - require()</description>
+</snippet>
