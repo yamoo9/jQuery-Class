@@ -20,11 +20,22 @@ require.config({
 		'jquery'    : 'libs/jquery-1.11.3.min',
 		'modernizr' : 'libs/modernizr.custom.71961',
 		'detectizr' : 'libs/detectizr.min'
+	},
+	// shim 설정
+	shim: {
+		'modernizr': {
+			exports: 'Modernizr'
+		},
+		'detectizr': {
+			exports: 'Detectizr',
+			deps: ['modernizr']
+		}
 	}
 });
 
 // RequireJS 모듈 관리 (의존성관리)
-require(['modernizr', 'jquery'], function(Modernizr, $) {
-	console.log('Modernizr: ' + Modernizr);
+require(['detectizr', 'jquery'], function(Detectizr, $) {
+	console.log('Modernizr를 통해 Flexbox 신기술 적용 유무 체크: ' + Modernizr.flexbox);
+	console.log('Detectizr: ' + Detectizr);
 	console.log('jQuery 버전: ' + $.fn.jquery);
 });
