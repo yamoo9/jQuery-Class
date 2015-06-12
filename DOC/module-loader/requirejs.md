@@ -20,7 +20,7 @@ $ npm install requirejs
 			// Require.js 환경설정(Configuration)
 			// http://requirejs.org/docs/api.html#config
 			var require = {
-				// 기본 위치 지정
+				// index.html 기준, 기본 위치 지정
 				baseUrl: 'www/js/'
 			};
 		</script>

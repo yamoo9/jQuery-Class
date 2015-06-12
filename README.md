@@ -1,75 +1,76 @@
 ## 웹 접근성을 고려한 jQuery 플러그인 제작 과정
 
 - [1일차 내용 요약](DOC/DAY01.md)
+- [2일차 내용 요약](DOC/DAY02.md)
 
 ---
 
-### 2일차 "JS 모듈 관리(Javascript Modules Management)"
+### 3일차 "RequireJS를 활용한 모듈 정의/호출 복습"
 
-이번 시간에는 Javascript 관리와 성능을 향상시키지 위한 모듈 관리방법에 대해 알아보고<br>
-Client/Server Side Javascript 표준화를 위한 [CommonJS](http://en.wikipedia.org/wiki/CommonJS), [AMD](http://en.wikipedia.org/wiki/Asynchronous_module_definition)에 대해 공부합니다.<br>
-익히 잘 알려진 모듈 관리도구로는 `Require.js`와 `Browserify`가 있습니다.
+Javascript는 사용하기 편한만큼 편함에 너무 의존하다보면 돌이킬 수 없는 스파게티 코드나 중복 코드 발생이 많아질 수 있어, 모듈 프로그래밍이 필요합니다. RequireJS는 이러한 경우의 한 대안이 될 수 있습니다. RequireJS를 사용하면 모듈 생성/호출 등 관리를 통해 좀 더 체계적인 프로그래밍을 가능하게 해 주며, 브라우저 지원 또한 IE 6 이상 지원합니다.
 
-- [＞ Require.js](DOC/module-loader/requirejs.md)
-- [＞ Browserify](DOC/module-loader/browserify.md)
+#### RequireJS에서 모듈 정의/호출에 사용되는 함수
 
--
+- 모듈 정의 `Module Define`
+- 모듈 호출 `Module Require`
 
-### 모듈 관리도구 - 현재 트랜드 체크!
+```js
+// 모듈 정의
+define(id, [dependencies], callback);
 
-[Google 트렌드 자료](http://www.google.com/trends/explore#q=require.js%2C%20Browserify&date=1%2F2011%2054m&cmpt=q&tz=)를 살펴보면 2014년 이후부터 `Require.js` 보다 `Browserify` 검색량이 급증.
+// 모듈 호출
+require([dependencies], callback);
+```
 
-![구글 트렌드: 시간 흐름에 따른 관심도 변화](GUIDE/compare-requirejs-vs-browserify.png)
+#### RequireJS 환경설정
+<!-- http://blog.javarouka.me/2013/04/requirejs-javascript.html -->
 
--
+```js
+// 이 코드를 RequireJS가 로딩된 뒤 기타 모듈을 로딩하기 전에 둔다.
+require.config({
+	// 모듈을 로딩할 기본 패스를 지정한다.
+	baseUrl: "/js/some/path",
 
-### 프론드-엔드 개발자로서 요구되는 능력
+	// 모듈의 기본 패스를 지정한다
+	// 모듈의 이름과 실제 경로를 매핑할 수 있어 별칭(alias) 기능도 할 수 있다
+	paths: {
+		"module1": "modules/module1", // 이 모듈은 /js/some/path/module/module1.js 경로.
 
-[![Front-End Developer Infographic](GUIDE/life-of-front-end-developer-infographic-Secondary.jpg)](http://www.skilledup.com/articles/life-front-end-web-developer-infographic)
+		// 모듈 패스를 배열로 주게 되면 먼저 앞의 URL로 로딩해보고 안되면 다음 경로에서 로딩한다.
+		// CDN 등을 사용할 때 좋다.
+		"jquery": [
+			"https://code.jquery.com/jquery.min",
+			"libs/jquery"
+		]
+	},
 
-#### 고려해야 할 목표
-- 접근성
-- 사용성
-- 성능 향상
+	// 모듈의 로딩 시간을 지정한다. 이 시간을 초과하면 Timeout Error 가 throw 된다
+	waitSeconds: 15
+});
+```
 
-#### 요구되는 테크닉
+#### `r.js`를 활용한 최적화(Optimize)
 
-- **가이드라인**
-	- 접근성
-	- 검색엔진최적화(SEO)
-	- UX 사용성 모델
+다음 시간에 다지 정리.
 
-- **웹 언어**
-	- HTML
-	- CSS
-	- Javascript
+---
 
-- **라이브러리**
-	- jQuery
-	- Underscore
-	- Modernizr
+#### 테스트를 위한 간단한 웹서버 환경 설정
 
-- **이미지 편집**
-	- Photoshop
-	- Illustrator
+##### Node.js 모듈 `http-server` 전역 설치 (Global Install)
 
-- **프리프로세싱 & 컴파일러**
-	- CSS
-		- Sass
-		- LESS
-	- JS
-		- CoffeeScript
-		- TypeScript
+```sh
+$ npm install --global http-server # npm i -g http-server
+```
 
-- **모듈 관리**
-	- requireJS
-	- Browerify
+##### `http-server` 사용방법
 
-- **업무 관리도구**
-	- Gulp
-	- Grunt
+루트 디렉토리(root directory)로 설정할 폴더에서 아래 명령어를 실행.
 
-- **클라이언트 사이드 MVC 프레임워크**
-	- Angular
-	- Backbone
-
+```sh
+$ http-server -a localhost -p 8888 -o
+# 옵션
+# --address, -a
+# --port, -p
+# --open, -o
+```
