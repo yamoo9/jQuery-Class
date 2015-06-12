@@ -1,8 +1,6 @@
-## 웹 접근성을 고려한 jQuery 플러그인 제작 과정
+[＜ README.md](../README.md)
 
-- [1일차 내용 요약](DOC/DAY01.md)
-
----
+-
 
 ### 2일차 "JS 모듈 관리(Javascript Modules Management)"
 
@@ -10,8 +8,8 @@
 Client/Server Side Javascript 표준화를 위한 [CommonJS](http://en.wikipedia.org/wiki/CommonJS), [AMD](http://en.wikipedia.org/wiki/Asynchronous_module_definition)에 대해 공부합니다.<br>
 익히 잘 알려진 모듈 관리도구로는 `Require.js`와 `Browserify`가 있습니다.
 
-- [＞ Require.js](DOC/module-loader/requirejs.md)
-- [＞ Browserify](DOC/module-loader/browserify.md)
+- [＞ Require.js](module-loader/requirejs.md)
+- [＞ Browserify](module-loader/browserify.md)
 
 -
 
@@ -72,4 +70,3 @@ Client/Server Side Javascript 표준화를 위한 [CommonJS](http://en.wikipedia
 - **클라이언트 사이드 MVC 프레임워크**
 	- Angular
 	- Backbone
-
