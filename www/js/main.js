@@ -40,10 +40,14 @@ require.config({
 
 
 // 모듈 호출
-require(['assignBgImageforPage'], function($, isJquery, isJqueryVersion) {
-
-	// console.log(isJquery(), isJqueryVersion);
-
-
-
+require([
+	'isJquery',
+	'isJqueryVersion',
+	'assignBgImageforPage'
+],
+function(
+	isJquery,
+	isJqueryVersion
+) {
+	console.log(isJquery(), isJqueryVersion);
 });
