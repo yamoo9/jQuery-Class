@@ -15,4 +15,12 @@
 $ npm install --global http-server # npm i -g http-server
 ```
 
+### AMD 방식의 함수들
+
+```js
+// 모듈 정의
+define(id, [dependencies], callback);
+// 모듈 호출
+require([dependencies], callback);
+```
 
