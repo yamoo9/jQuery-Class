@@ -51,7 +51,92 @@ require.config({
 
 #### `r.js`를 활용한 최적화(Optimize)
 
-다음 시간에 다지 정리.
+##### Javascript 최적화
+
+```js
+/**
+ * -------------------------------------------------------------------
+ * r.js 설정 API: JS
+ * http://requirejs.org/docs/optimization.html#onejs
+ * https://github.com/jrburke/r.js/blob/master/build/example.build.js
+ * 명령 창 기준으로 경로 설정
+ * -------------------------------------------------------------------
+ * name                    = main
+ * mainConfigFile          = js/main.js
+ * out                     = js/build/build.js
+ * baseUrl                 = js
+ * optimize                = none
+ * generateSourceMaps      = true
+ * preserveLicenseComments = false
+ * -------------------------------------------------------------------
+ */
+$ node r.js -o name=main mainConfigFile=js/main.js out=js/build/build.js baseUrl=js optimize=none
+```
+
+##### CSS 최적화
+
+```js
+/**
+ * -------------------------------------------------------------------
+ * r.js 설정 API: CSS
+ * http://requirejs.org/docs/optimization.html#onecss
+ * 명령 창 기준으로 경로 설정
+ * -------------------------------------------------------------------
+ * cssIn       = 모듈 스타일을 통합하는 스타일 문서 경로
+ * out         = 모듈을 통합하여 빌드되는 파일 경로
+ * optimizeCss = none|standard.(keepLines|keepWhitespace|keepWhitespace)
+ * https://github.com/jrburke/r.js/blob/master/build/example.build.js#L218
+ * -------------------------------------------------------------------
+ */
+$ node r.js -o cssIn=style.css out=build/css/style.min.css optimizeCss=none
+```
+
+##### [빌드 프로필(build profile)](http://requirejs.org/docs/optimization.html#wholeproject) 활용
+
+```js
+/**
+ * build.js
+ * --------------------------------
+ */
+
+({
+	// r.js 설정 API
+	// https://github.com/jrburke/r.js/blob/master/build/example.build.js
+    name                    : "main",
+	// build/ 디렉토리 기준 설정
+    baseUrl                 : "../js/",
+    // build된 JS 파일 출력 설정
+    out                     : "../js/build/build.min.js",
+    // main.js 파일 위치 설정
+    mainConfigFile          : "../js/main.js",
+    // 삽입할 라이브러리 설정
+    include                 : ["requireLib"],
+    // 경로 설정
+    paths                   : { requireLib: 'libs/require.min' },
+    // 최적화 설정
+    // optimize                : "uglify2", // "none", "uglify2", "uglify"
+    // 소스맵 생성 설정
+    // generateSourceMaps      : true,
+    // 저작권 주석 보존 설정
+    // preserveLicenseComments : false
+})
+```
+
+```js
+/**
+ * build.css.js
+ * --------------------------------
+ */
+
+({
+    // build 디렉토리 기준 설정
+    cssIn    : "../css/style.css",
+    // build된 CSS 파일 출력 설정
+    out      : "../css/style.min.css",
+    // 최적화 설정
+    optimize : "none", // "none", "standard.(keepLines,keepWhitespace,keepWhitespace)"
+})
+```
 
 ---
 
