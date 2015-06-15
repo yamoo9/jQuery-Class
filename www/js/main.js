@@ -22,13 +22,22 @@ require.config({
 });
 
 /**
+ * 모듈 exports 테스트
+ * --------------------------------
+ */
+// require(['modernizr', 'detectizr'], function(m, d) {
+// 	console.log(m, d);
+// });
+
+/**
  * 모듈별 호출 코드
  * --------------------------------
  */
 require(['detectizr', 'jquery'], function(Detectizr, $) {
+	'use strict';
 
 	// jQuery 플러그인: $('body').setHeight100vh();
-	// console.log( jQuery.prototype === jQuery.fn );
+	console.log( $.prototype === $.fn, $().jquery );
 
 	if( !$.fn.setHeight100vh ) {
 		$.fn.setHeight100vh = function() {
@@ -49,6 +58,9 @@ require(['detectizr', 'jquery'], function(Detectizr, $) {
 	$('body').setHeight100vh().redify().addClass('body_el');
 
 });
+
+
+
 
 
 // require(['detectizr', 'jquery'], function(Detectizr, $) {
