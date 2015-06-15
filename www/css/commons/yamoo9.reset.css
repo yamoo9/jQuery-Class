@@ -1,0 +1,23 @@
+html {
+	-webkit-font-smoothing: antialiased;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+	overflow-y: visible;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+nav a {
+	text-decoration: none;
+}
+
+nav ul {
+	list-style: none;
+}
+
+a img {
+	vertical-align: bottom;
+	border: none;
+}

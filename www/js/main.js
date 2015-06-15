@@ -1,51 +1,67 @@
 /**
  * --------------------------------
- * require([의존파일리스트], 콜백함수)
- * --------------------------------
- */
-
-/**
- * --------------------------------
- * RequireJS 환경설정
+ * requireJS 환경설정(Configuration)
  * --------------------------------
  */
 require.config({
 	baseUrl: 'js',
 	paths: {
-		'jquery'               : 'libs/jquery.min',
-		'isJquery'             : 'modules/isJquery',
-		'isJqueryVersion'      : 'modules/isJqueryVersion',
-		'assignBgImageforPage' : 'modules/assignBgImageforPage'
+		'jquery'    : 'libs/jquery.min',
+		'modernizr' : 'libs/modernizr.min',
+		'detectizr' : 'libs/detectizr.min'
+	},
+	shim: {
+		'modernizr': {
+			exports: 'Modernizr'
+		},
+		'detectizr': {
+			exports: 'Modernizr.Detectizr',
+			deps: ['modernizr']
+		}
 	}
 });
 
 /**
- * DOMScript Code
- * 별도의 모듈 호출 X
+ * 모듈별 호출 코드
  * --------------------------------
  */
-require([], function() {
-	var body = document.body;
-	body.classList.add('no-assign-jquery');
-	body.style.height = window.innerHeight + 'px';
-	body.setAttribute('data-body', 'root');
+require(['detectizr', 'jquery'], function(Detectizr, $) {
+
+	// jQuery 플러그인: $('body').setHeight100vh();
+	// console.log( jQuery.prototype === jQuery.fn );
+
+	if( !$.fn.setHeight100vh ) {
+		$.fn.setHeight100vh = function() {
+			// console.log(this); // jQuery Object
+			this.css('height', '100vh');
+			return this; // jQuery Object
+		}
+	}
+
+	if( !$.fn.redify ) {
+		$.fn.redify = function() {
+			this.css('background', '#FC414B');
+			return this;
+		}
+	}
+
+	// 플러그인 실행 코드
+	$('body').setHeight100vh().redify().addClass('body_el');
+
 });
 
 
+// require(['detectizr', 'jquery'], function(Detectizr, $) {
 
-/**
- * jQuery 활용 Code
- * 모듈 호출
- * --------------------------------
- */
-require([
-	'isJquery',            // 함수 반환
-	'isJqueryVersion',     // jQuery 버전 반환
-	'assignBgImageforPage' // #page 요소 생성 및 조작 수행
-],
-function(
-	isJquery,
-	isJqueryVersion
-) {
-	console.log(isJquery(), isJqueryVersion);
-});
+// 	// requireJS > main.js > modernizr.js > detectizr.js > callback
+// 	Detectizr.detect();
+
+// 	// requireJS > main.js > jquery.js > callback
+// 	$('body').height('100vh').css({
+// 		'background': '#FC414B'
+// 	});
+// });
+
+// require(['jquery', 'modernizr'], function($, Modernizr) {
+// 	console.log($ === window.jQuery, Modernizr);
+// });

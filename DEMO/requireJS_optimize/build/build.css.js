@@ -4,5 +4,5 @@
     // build된 CSS 파일 출력 설정
     out         : "../css/style.min.css",
     // 최적화 설정
-    optimizeCss : "none", // "none", "standard.(keepLines,keepWhitespace,keepWhitespace)"
+    optimizeCss : "none", // "none", "standard.(keepLines,keepWhitespace)"
 })

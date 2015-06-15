@@ -1,0 +1,40 @@
+/**
+ * clearFix
+ * --------------------------------
+ */
+/* Legacy */
+.clearfix::after {
+	content: '';
+	display: block;
+	clear: both; }
+.lt-ie8 .clearfix { zoom: 1; }
+
+/* Micro */
+.cf:after,
+.cf:before { content: ''; display: table; }
+.cf:after { clear: both; }
+.lt-ie8 .cf { zoom: 1; }
+
+/**
+ * Accessible Hidden
+ * --------------------------------
+ */
+.readable-hidden {
+	overflow: hidden;
+	position: absolute;
+	clip:     rect(0 0 0 0);
+	clip:     rect(0,0,0,0);
+	width:    1px;
+	height:   1px;
+	margin:   -1px;
+	padding:  0;
+	border:   0;
+}
+.readable-hidden.focusable {
+	overflow: visible;
+	position: static;
+	clip:     auto;
+	width:    auto;
+	height:   auto;
+	margin:   0;
+}
