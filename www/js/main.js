@@ -24,12 +24,12 @@ require.config({
  * 별도의 모듈 호출 X
  * --------------------------------
  */
-require([], function() {
-	var body = document.body;
-	body.classList.add('no-assign-jquery');
-	body.style.height = window.innerHeight + 'px';
-	body.setAttribute('data-body', 'root');
-});
+// require([], function() {
+// 	var body = document.body;
+// 	body.classList.add('no-assign-jquery');
+// 	body.style.height = window.innerHeight + 'px';
+// 	body.setAttribute('data-body', 'root');
+// });
 
 
 

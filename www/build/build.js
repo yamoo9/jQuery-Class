@@ -14,9 +14,9 @@
     // 경로 설정
     paths                   : { requireLib: 'libs/require.min' },
     // 최적화 설정
-    // optimize                : "none", // "none", "uglify2", "uglify"
+    optimize                : "uglify2", // "none", "uglify2", "uglify"
     // 소스맵 생성 설정
-    // generateSourceMaps      : !true,
+    generateSourceMaps      : true,
     // 저작권 주석 보존 설정
-    // preserveLicenseComments : !false
+    preserveLicenseComments : false
 })
