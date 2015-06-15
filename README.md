@@ -130,11 +130,11 @@ $ node r.js -o cssIn=style.css out=build/css/style.min.css optimizeCss=none
 
 ({
     // build 디렉토리 기준 설정
-    cssIn    : "../css/style.css",
+    cssIn                   : "../css/style.css",
     // build된 CSS 파일 출력 설정
-    out      : "../css/style.min.css",
+    out                     : "../css/style.min.css",
     // 최적화 설정
-    optimize : "none", // "none", "standard.(keepLines,keepWhitespace,keepWhitespace)"
+    optimizeCss             : "none", // "none", "standard.(keepLines,keepWhitespace,keepWhitespace)"
 })
 ```
 
