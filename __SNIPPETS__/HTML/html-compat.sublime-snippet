@@ -1,5 +1,6 @@
-<!--[if IE]><![endif]-->
-<!DOCTYPE html>
+<snippet>
+	<content><![CDATA[<!--[if IE]><![endif]-->
+<!DOCTYPE html>${2:
 <!--
 [참고 아티클]
 * http://nicolasgallagher.com/better-conditional-classnames-for-hack-free-css/
@@ -10,7 +11,7 @@
 
 IE 웹 브라우저는 호환성 보기 헤더(X-UA-Compatible header)가 설정되지 않을 경우, 쿼크모드(Quirksmode)로 변경되는 문제를 가짐.
 다소 DRY 원칙(Don't Repeat Yourself, 반복하지마라)에 어긋나 보이지만 <html> 요소가 코드에 반복처리되는 것은 아니니 큰 문제는 아님.
--->
+-->}
 <!--[if IE 6]> <html lang="ko-KR" class="no-js lt-ie10 lt-ie9 lt-ie8 ie6"> <![endif]-->
 <!--[if IE 7]> <html lang="ko-KR" class="no-js lt-ie10 lt-ie9 lt-ie8 ie7"> <![endif]-->
 <!--[if IE 8]> <html lang="ko-KR" class="no-js lt-ie10 lt-ie9 ie8"> <![endif]-->
@@ -19,21 +20,24 @@ IE 웹 브라우저는 호환성 보기 헤더(X-UA-Compatible header)가 설정
 <html lang="ko-KR" class="no-js">
 <!--<![endif]-->
 <head>
-	<!--
+${2:	<!--
 		[Apache | .htaccess 설정]
 		https://github.com/h5bp/server-configs-apache/blob/master/dist/.htaccess#L125
 
 		[각 서버(Server)에서 X-UA-Compatible 설정 방법]
 		https://github.com/h5bp/server-configs
 	-->
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+}	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta charset="UTF-8">
-	<title>jQuery 문법 정리</title>
+	<title>$1</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="css/style.css">
-	<script src="js/libs/require.min.js" data-main="js/config"></script>
+	$3
 </head>
 <body>
-
+	$0
 </body>
-</html>
+</html>]]></content>
+	<tabTrigger>html:compat</tabTrigger>
+	<scope>text.html</scope>
+	<description>HTML5 CC4IE Document</description>
+</snippet>

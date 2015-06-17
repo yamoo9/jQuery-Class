@@ -17,13 +17,13 @@ Client/Server Side Javascript 표준화를 위한 [CommonJS](http://en.wikipedia
 
 [Google 트렌드 자료](http://www.google.com/trends/explore#q=require.js%2C%20Browserify&date=1%2F2011%2054m&cmpt=q&tz=)를 살펴보면 2014년 이후부터 `Require.js` 보다 `Browserify` 검색량이 급증.
 
-![구글 트렌드: 시간 흐름에 따른 관심도 변화](GUIDE/compare-requirejs-vs-browserify.png)
+![구글 트렌드: 시간 흐름에 따른 관심도 변화](../GUIDE/compare-requirejs-vs-browserify.png)
 
 -
 
 ### 프론드-엔드 개발자로서 요구되는 능력
 
-[![Front-End Developer Infographic](GUIDE/life-of-front-end-developer-infographic-Secondary.jpg)](http://www.skilledup.com/articles/life-front-end-web-developer-infographic)
+[![Front-End Developer Infographic](../GUIDE/life-of-front-end-developer-infographic-Secondary.jpg)](http://www.skilledup.com/articles/life-front-end-web-developer-infographic)
 
 #### 고려해야 할 목표
 - 접근성
