@@ -1,5 +1,6 @@
 <snippet>
 	<content><![CDATA[require([${1:dependencies}], function($2) {
+	'use strict';
 	$0
 });]]></content>
 	<tabTrigger>amd-require</tabTrigger>

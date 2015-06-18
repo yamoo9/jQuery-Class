@@ -1,0 +1,19 @@
+html {
+	-webkit-font-smoothing: antialiased;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+	overflow-y: visible;
+}
+
+body * {
+	box-sizing: border-box;
+}
+
+.demo {
+	transform-style: preserve-3d;
+	transform-origin: 50% 50%;
+	transform: perspective(400px) scale(1);
+}
+
+.demo:hover {
+	transform: scale(2);
+}
