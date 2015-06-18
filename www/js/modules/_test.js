@@ -14,7 +14,7 @@ require(['detectizr', 'jquery'], function(Detectizr, $) {
 	'use strict';
 
 	console.log('$ === window.jQuery: ', $ === window.jQuery);
-	console.log('$.prototype === $.fn: ', $.prototype === $.fn, '\njQuery Version: ', $().jquery );
+	console.log('$.prototype === $.fn: ', $.prototype === $.fn, '\njQuery Version: ', $.fn.jquery );
 
 });
 

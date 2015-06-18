@@ -1,5 +1,6 @@
 require(['init'], function(init) {
 	'use strict';
 
-	setTimeout(init, 300);
+	setTimeout(init, 1000);
+
 });

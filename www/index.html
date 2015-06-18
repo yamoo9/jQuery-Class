@@ -11,13 +11,13 @@
 IE 웹 브라우저는 호환성 보기 헤더(X-UA-Compatible header)가 설정되지 않을 경우, 쿼크모드(Quirksmode)로 변경되는 문제를 가짐.
 다소 DRY 원칙(Don't Repeat Yourself, 반복하지마라)에 어긋나 보이지만 <html> 요소가 코드에 반복처리되는 것은 아니니 큰 문제는 아님.
 -->
+<!--[if !IE]><!-->
+<html lang="ko-KR" class="no-js">
+<!--<![endif]-->
 <!--[if IE 6]> <html lang="ko-KR" class="no-js lt-ie10 lt-ie9 lt-ie8 ie6"> <![endif]-->
 <!--[if IE 7]> <html lang="ko-KR" class="no-js lt-ie10 lt-ie9 lt-ie8 ie7"> <![endif]-->
 <!--[if IE 8]> <html lang="ko-KR" class="no-js lt-ie10 lt-ie9 ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="ko-KR" class="no-js lt-ie10 ie9"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="ko-KR" class="no-js">
-<!--<![endif]-->
 <head>
 	<!--
 		[Apache | .htaccess 설정]
@@ -34,6 +34,13 @@ IE 웹 브라우저는 호환성 보기 헤더(X-UA-Compatible header)가 설정
 	<script src="js/libs/require.min.js" data-main="js/config"></script>
 </head>
 <body>
+
+	<ul>
+		<li>야무.</li>
+		<li>씩씩하게.</li>
+		<li>다 들리는.</li>
+		<li>숨소리가.</li>
+	</ul>
 
 </body>
 </html>

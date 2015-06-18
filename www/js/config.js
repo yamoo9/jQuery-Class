@@ -5,6 +5,10 @@
  */
 require.config({
 
+	/**
+	 * JS 파일의 기본 경로 설정
+	 * @type {String}
+	 */
 	baseUrl: 'js',
 
 	/**
@@ -19,9 +23,11 @@ require.config({
 		// 플러그인
 		'redify'           : 'plugins/jquery.redify',
 		'setHeight100vh'   : 'plugins/jquery.setHeight100vh',
+		'radioClass'       : 'plugins/jquery.radioClass',
 		// 모듈
-		'main'             : 'modules/main',
 		'init'             : 'modules/init',
+		'main'             : 'modules/main',
+		'other_main'       : 'modules/other_main',
 		'active_detectizr' : 'modules/active_detectizr',
 	},
 
@@ -40,11 +46,21 @@ require.config({
 		}
 	},
 
+	/**
+	 * config.js에서 호출하는 JS 파일 등록
+	 * @type {Array}
+	 */
 	deps: [
 		'main',
-		'modules/_test',
+		// 'init',
+		// 'other_main',
+		// 'modules/_test',
+		// 'plugins/jquery.radioClass',
+		// 'modules/checkLibs'
 	],
+
 	waitSeconds : 15,
+
 	urlArgs     : 'ts=' + (new Date()).getTime(),
 
 });
