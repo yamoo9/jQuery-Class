@@ -4,72 +4,135 @@
 - [2일차 내용 요약](DOC/DAY02.md)
 - [3일차 내용 요약](DOC/DAY03.md)
 - [4일차 내용 요약](DOC/DAY04.md)
+- [5일차 내용 요약](DOC/DAY05.md)
 
 ---
 
-## jQuery 플러그인 제작 - radioClass
+### Javascript 함수 패턴
+
+- 함수 선언식
+- 함수 표현식
+- 즉시 실행함수
+- 생성자 함수 `Constructor Functions` - "객체를 생성하는 함수"
+    - 다른 언어의 클래스(Class)와 유사한 개념
+    - `new` 연산자를 생성자 함수 이름 앞에 붙여 사용하면 객체 인스턴스를 생성함.
+    - 생성자 함수의 경우, 관례상 이름 첫 글자를 대문자로 작성.
+    - 객체 생성(Create) / 상속(Inheritance) / 초기화(Initialization)
+
+
+#### 함수 선언식 `Function Expressions`
 
 ```js
-define(['jquery'], function($) {
-    'use strict';
+/**
+ * 작성 방법
+ * function 함수이름() {}
+ */
+function showMenu() {}
+```
 
-    // $.fn은 jQuery 프로토타입(prototype)을 말합니다.
-    // $.fn 객체의 메소드 중, radioClass가 없을 경우 조건문이 실행됩니다.
-    if (!$.fn.radioClass) {
+#### 함수 표현식 `Function Declations`
 
-        // $.fn 객체의 radioClass 메소드 정의
-        // 전달인자 {name} @string
-        $.fn.radioClass = function(name) {
+```js
+/**
+ * 작성 방법
+ * var 함수이름 = function() {};
+ */
+var showMenu = function () {};
+```
 
-            // 전달인자 유효성 검사 (다음 시간에 배웁니다)
-            if ( $.type(name) !== 'string' ) { throw new TypeError(); }
+#### 즉시 실행함수 `Self-Excuting Anonymous Functions`
 
-            // 플러그인 함수 내부에서 this는 jQuery 인스턴스 객체를 가리킵니다.
-            // $('a.me').radioClass()의 경우, this는 $('a.me')를 가리키는거죠.
-            // 플러그인이 연결된 jQuery 인스턴스 객체에 name 클래스 속성을 추가합니다.
-            this.addClass(name);
+```js
+/**
+ * 작성 방법
+ * (function(){})() 또는 (function(){}())
+ */
+(function (global, undefined) {
+	// 독립된 공간(Scope)에 코드 작성
+})(window !== undefined ? window : this);
+```
 
-            // radioClass의 목적 그대로 형제 요소노드에서는 name 클래스 속성을
-            // 제거해야 하니 형제 요소노드를 찾아 변수 $siblings에 참조합니다.
-            // jQuery 인스턴스 메소드 중, .siblings()는 형제 요소노드를 찾아
-            // 집합(jQuery 인스턴스 객체)을 반환합니다.
-            var $siblings = this.siblings();
 
-            // 오늘 수업의 핵심인 jQuery 유틸리티 메소드 $.each()를 사용하여
-            // $siblings 집합을 탐색하여 수집된 요소노드 개수만큼 반복 처리합니다.
-            // 쉽게 말해 반복 구문(for, while문 등)을 사용한 겁니다.
-            // ECMAScript v5 [].forEach() 문과 유사합니다. (전달인자 순서는 반대)
-            $.each($siblings, function(index, item) {
+#### 함수는 별도의 독립된 공간(Scope)을 형성
 
-                // $() 팩토리 함수를 가급적 사용하지 않는 것이 성능 고려에 있어
-                // 주요한 점이니, .eq() 인스턴스 메소드를 사용하여 수집된
-                // $siblings에서 index에 해당되는 원소(item)을 꺼내
-                // $item 변수에 참조합니다.
-                var $item =  $siblings.eq(index);
+```js
+/**
+ * 오늘날 자바스크립트는 전역(Window) 공간을 오염시키지 않는 것이 중요!!!
+ * 필요하다면 명시적으로 `global`을 붙여서 외부 모듈과 공유
+ * 가급적 `var`를 붙여서 지역 변수 생성
+ */
+(function (global, undefined) {
 
-                // $item에 참조된 요소에 name 클래스 속성 값이 포함되어 있는지
-                // 확인합니다.
-                if ( $item.hasClass(name) ) {
+	// 지역 내에서만 사용 가능한 로컬 함수
+	var _localFn = function() {
+		// ....
+	};
 
-                    // name 클래스 속성이 포함되어 있다면, 이를 제거합니다.
-                    $item.removeClass(name);
-                }
+	// 전역 변수 gFn에 로컬 함수 _localFn 참조 (전역 공유)
+	global.gFn = _localFn;
 
-                // 네이티브 DomScript에서는 아래와 같은 방법을 사용합니다.
-                // IE 10+ 이상 부분 지원합니다. (IE Edge부터 완벽 지원)
-                // if (item.classList.contains(name) ) {
-                //  item.classList.remove(name);
-                // }
+})(window !== undfined ? window : this);
+```
 
-            });
 
-            // jQuery 체이닝(Chaning)을 고려한다면, this를 반환합니다.
-            // this는 jQuery 인스턴스 객체
-            return this;
+#### 함수 내부에서 `this`가 참조하는 대상
 
-        }
+```js
+// 일반함수
+function normalFn() {
+	console.log(this); // 함수가 실행되는 컨텍스트(문맥)
+};
 
-    }
+// 일반함수 실행
+normalFn();                                              // this === window
+document.onclick = normalFn;                             // this === document
+document.querySelector('a.ext').onmouseenter = normalFn; // this === a.ext
 
-});
+
+// 생성자 함수
+function ConstructorFn() {
+	console.log(this); // 생성자 함수 내 this는 생성된 객체를 가리킴.
+}
+
+// new 연산자를 붙여 생성자 함수 실행 - 객체 생성
+var instance = new ConstructorFn; // this === instance 객체
+```
+
+
+#### 생성자 함수 사용 예
+
+Navigation 객체 생성자와 프로토타입
+
+```js
+// 객체 생성하는 함수 : 생성자 함수 (Constructor Function)
+function Navigation(el) {
+	this.el             = document.querySelector(el);
+	this.children       = this.el.querySelectorAll('a');
+	this.childrenLength = this.children.length;
+};
+
+// 생성자 함수의 프로토타입 : 생성되는 객체의 원형(Prototype)
+Navigation.prototype = {
+	nextLink : function() {
+		console.log(this.el, '다음 링크 활성화');
+	},
+	prevLink : function() {
+		console.log(this.el, '이전 링크 활성화');
+	},
+	goToLink : function(num) {
+		console.log(num + '링크 활성화');
+	},
+	playRollingLinks : function() {
+		console.log('링크 롤링 시작');
+	},
+	stopRollingLinks : function() {
+		console.log('링크 롤링 중지');
+	}
+};
+
+// Navigation 객체 생성
+var hNav = new Navigation('header nav');
+var aNav = new Navigation('aside nav');
+var mNav = new Navigation('main nav');
+var fNav = new Navigation('footer nav');
 ```
