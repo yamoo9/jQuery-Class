@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta charset="UTF-8">
+	<title>객체지향 자바스크립트</title>
+</head>
+<body>
+
+	<header>
+		<nav id="header-nav">
+			<ul>
+				<li>
+					<a href="">야무.</a>
+				</li>
+				<li>
+					<a href="">청춘의!</a>
+				</li>
+				<li>
+					<a href="">청춘아!?</a>
+				</li>
+				<li>
+					<a href="">만들.</a>
+				</li>
+				<li>
+					<a href="">않고.</a>
+				</li>
+				<li>
+					<a href="">않고.</a>
+				</li>
+				<li>
+					<a href="">설레게?</a>
+				</li>
+				<li>
+					<a href="">찬란한.</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+
+	<ul>
+		<li>야무.</li>
+		<li>세상을.</li>
+		<li>청춘아!?</li>
+		<li id="me">그대.</li>
+	</ul>
+
+	<main>
+		<nav id="main-nav">
+			<ul>
+				<li><a href="">야무.</a></li>
+				<li><a href="">티셔츠.</a></li>
+				<li><a href="">소리.</a></li>
+			</ul>
+		</nav>
+	</main>
+
+	<aside>
+		<nav id="aside-nav">
+			<ul>
+				<li><a href="">야무.</a></li>
+				<li><a href="">티셔츠.</a></li>
+				<li><a href="">소리.</a></li>
+			</ul>
+		</nav>
+	</aside>
+
+	<footer>
+		<nav id="footer-nav">
+			<ul>
+				<li><a href="">야무.</a></li>
+				<li><a href="">티셔츠.</a></li>
+				<li><a href="">소리.</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+	<footer>
+		<nav id="footer-nav">
+			<ul>
+				<li><a href="">야무.</a></li>
+				<li><a href="">티셔츠.</a></li>
+				<li><a href="">소리.</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+
+<script>
+	/**
+	 * ----------------------------------------------------
+	 * 함수형 자바스크립트 디자인 패턴
+	 * ----------------------------------------------------
+	 */
+
+	// 일반 함수
+	var normalFn = function() {
+		console.log(this); // 함수가 실행되는 컨텍스트(문맥)
+	};
+
+	normalFn();                                              // this === window
+	document.onclick = normalFn;                             // this === document
+	document.querySelector('a.ext').onmouseenter = normalFn; // this === a.ext
+
+
+	/**
+	 * ----------------------------------------------------
+	 * 객체 지향 자바스크립트 디자인 패턴
+	 * ----------------------------------------------------
+	 */
+
+	// 객체 생성하는 함수 : 생성자 함수 (Constructor Function)
+	function Navigation(el) {
+		this.el             = document.querySelector(el);
+		this.children       = this.el.querySelectorAll('a');
+		this.childrenLength = this.children.length;
+	};
+
+	// 생성자 함수의 프로토타입 : 생성되는 객체의 원형(Prototype)
+	Navigation.prototype = {
+		nextLink : function() {
+			console.log(this.el, '다음 링크 활성화');
+		},
+		prevLink : function() {
+			console.log(this.el, '이전 링크 활성화');
+		},
+		goToLink : function(num) {
+			console.log(num + '링크 활성화');
+		},
+		playRollingLinks : function() {
+			console.log('링크 롤링 시작');
+		},
+		stopRollingLinks : function() {
+			console.log('링크 롤링 중지');
+		}
+	};
+
+	// Navigation()을 쉽게 사용하기 위한 $nav() 헬퍼함수
+	function $nav(el) {
+		return new Navigation(el);
+	}
+
+	// $() 함수를 사용하여 Navigation 인스턴스 객체 생성
+	var hNav = $nav('header nav');
+	var aNav = $nav('aside nav');
+	var mNav = $nav('main nav');
+	var fNav = $nav('footer nav');
+
+</script>
+</body>
+</html>
