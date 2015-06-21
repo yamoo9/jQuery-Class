@@ -13,7 +13,7 @@
 - 함수 선언식
 - 함수 표현식
 - 즉시 실행함수
-- 생성자 함수 `Constructor Functions` - "객체를 생성하는 함수"
+- 생성자 함수
     - 다른 언어의 클래스(Class)와 유사한 개념
     - `new` 연산자를 생성자 함수 이름 앞에 붙여 사용하면 객체 인스턴스를 생성함.
     - 생성자 함수의 경우, 관례상 이름 첫 글자를 대문자로 작성.
@@ -130,9 +130,13 @@ Navigation.prototype = {
 	}
 };
 
-// Navigation 객체 생성
+// Navigation 인스턴스 객체 생성
 var hNav = new Navigation('header nav');
 var aNav = new Navigation('aside nav');
 var mNav = new Navigation('main nav');
 var fNav = new Navigation('footer nav');
+
+// Navigation 인스턴스 객체 메소드 활용
+hNav.nextLink();
+mNav.prevLink();
 ```
