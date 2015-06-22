@@ -5,7 +5,6 @@
 	Q.module('jquery.radioClass', {
 		beforeEach: function() {
 			this.$test = $('.test');
-			this.$test.radioClass();
 		}
 	});
 
@@ -27,7 +26,11 @@
 	});
 
 	Q.test('$(".test")에 class 속성 "its-me"가 추가되었는가?', function(A) {
-		A.ok(this.$test.hasClass('its-me'));
+		A.ok($('.test').radioClass().hasClass('its-me'));
+	});
+
+	Q.test('jQuery 플러그인 체이닝이 되는가?', function(A) {
+		A.strictEqual(this.$test, this.$test.radioClass());
 	})
 
 })(window.QUnit, window.jQuery);
