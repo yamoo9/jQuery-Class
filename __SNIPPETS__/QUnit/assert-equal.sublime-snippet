@@ -1,0 +1,6 @@
+<snippet>
+	<content><![CDATA[${1:assert}.equal(${2:actual[Object]}${3:, ${4:expected[Object]}}${5:, ${6:[message[String]]}});]]></content>
+	<tabTrigger>assert-equal</tabTrigger>
+	<scope>source.js</scope>
+	<description>Assert - equal()</description>
+</snippet>

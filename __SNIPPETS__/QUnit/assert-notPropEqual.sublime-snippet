@@ -1,0 +1,6 @@
+<snippet>
+	<content><![CDATA[${1:assert}.notPropEqual(${2:actual[Object]}${3:, ${4:expected[Object]}}${5:, ${6:[message[String]]}});]]></content>
+	<tabTrigger>assert-notPropEqual</tabTrigger>
+	<scope>source.js</scope>
+	<description>Assert - notPropEqual()</description>
+</snippet>

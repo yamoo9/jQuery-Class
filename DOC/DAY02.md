@@ -8,8 +8,8 @@
 Client/Server Side Javascript 표준화를 위한 [CommonJS](http://en.wikipedia.org/wiki/CommonJS), [AMD](http://en.wikipedia.org/wiki/Asynchronous_module_definition)에 대해 공부합니다.<br>
 익히 잘 알려진 모듈 관리도구로는 `Require.js`와 `Browserify`가 있습니다.
 
-- [＞ Require.js](module-loader/requirejs.md)
-- [＞ Browserify](module-loader/browserify.md)
+- [＞ Require.js](modules/requirejs.md)
+- [＞ Browserify](modules/browserify.md)
 
 -
 

@@ -1,0 +1,6 @@
+<snippet>
+	<content><![CDATA[${1:assert}.deepEqual(${2:actual[Object]}${3:, ${4:expected[Object]}}${5:, ${6:[message[String]]}});]]></content>
+	<tabTrigger>assert-deepEqual</tabTrigger>
+	<scope>source.js</scope>
+	<description>Assert - deepEqual()</description>
+</snippet>
