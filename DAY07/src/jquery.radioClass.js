@@ -3,4 +3,15 @@
 (function(global, $){
 	'use strict';
 
+	// $.fn.radioClass 플러그인이 존재하지 않는다면?
+	if ( !$.fn.radioClass ) {
+		// $.fn.radioClass 플러그인 정의
+		$.fn.radioClass = function() {
+			// jQuery 플러그인 내부의 this가 참조하는 것은?
+			// this가 참조하는 것은 $() 인스턴스 객체
+			this.addClass('its-me');
+		};
+
+	}
+
 })(window, window.jQuery);
