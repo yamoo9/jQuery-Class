@@ -4,7 +4,8 @@
 	// Qunit 모듈 정의
 	Q.module('jquery.radioClass', {
 		beforeEach: function() {
-			this.$test = $('.test');
+			this.name = 'demo';
+			this.$test = $('.test').radioClass(this.name);
 		}
 	});
 
@@ -25,12 +26,17 @@
 		A.ok($.fn.radioClass);
 	});
 
-	Q.test('$(".test")에 class 속성 "its-me"가 추가되었는가?', function(A) {
-		A.ok($('.test').radioClass().hasClass('its-me'));
+	Q.test('$(".test")에 class 속성 "demo"가 추가되었는가?', function(A) {
+		A.ok($('.test').radioClass().hasClass(this.name));
 	});
 
 	Q.test('jQuery 플러그인 체이닝이 되는가?', function(A) {
-		A.strictEqual(this.$test, this.$test.radioClass());
-	})
+		// A.strictEqual(this.$test, this.$test.radioClass());
+	});
+
+	Q.test('name 전달인자 값을 정상적으로 처리하는가?', function(A){
+		// console.log(this.$test.radioClass('demo').hasClass('demo'));
+		A.ok(this.$test.hasClass(this.name));
+	});
 
 })(window.QUnit, window.jQuery);

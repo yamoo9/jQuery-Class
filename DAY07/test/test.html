@@ -21,9 +21,24 @@
 	<div id="qunit-fixture"></div>
 	<!-- 끝: #qunit -->
 
-	<div class="test"></div>
+	<ul id="demo">
+		<li><a href="">item</a></li>
+		<li class="test"><a href="">test item</a></li>
+		<li><a href="">item</a></li>
+		<li><a href="">item</a></li>
+	</ul>
 
+<script>
+(function($){
+	var $demo = $('#demo');
+	$demo.on('click', 'li > a', function(e) {
+		e.preventDefault();
+		// $(this).parent().radioClass('clicked');
+		$(this).radioClass('clicked');
+	});
+})(window.jQuery);
+</script>
 <!-- 플러그인 테스트 파일 -->
-<script src="jquery.radioClass.test.js"></script>
+<!-- <script src="jquery.radioClass.test.js"></script> -->
 </body>
 </html>
