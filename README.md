@@ -9,6 +9,252 @@
 
 ---
 
+### [TDD] QUnit을 활용한 jQuery 플러그인 개발 테스트
+※ `AMD` 키워드가 붙은 파일은 `requireJS`를 활용한 예시
+
+```sh
+.
+├── libs/
+│   ├── jquery.min.js
+│   ├── qunit/
+│   │   ├── qunit.css
+│   │   ├── qunit.js
+│   │   └── theme/
+│   │       ├── qunit-theme-burce.css
+│   │       ├── qunit-theme-gabe.css
+│   │       ├── qunit-theme-ninja.css
+│   │       └── qunit-theme-nv.css
+│   └── require.js # AMD
+├── src/
+│   ├── amd.jquery.radioClass.js # AMD
+│   ├── jquery.radioClass.js
+│   └── main.js # AMD
+└── test/
+    ├── jquery.radioClass.test.js
+    ├── test-amd.html # AMD
+    ├── test.css
+    └── test.html
+```
+
+-
+
+#### `jquery.radioClass` 플러그인 작성
+
+```js
+// 전역이 오염되지 않도록 별도의 공간을 생성
+// 스코프 함수 (즉시 실행되는 함수 내부)
+(function(global, $){
+	'use strict';
+
+	// $.fn.radioClass 플러그인이 존재하지 않는다면?
+	if ( !$.fn.radioClass ) {
+
+		/**
+		 * $.fn.radioClass 플러그인 정의
+		 * @param  {string} name    radioClass를 적용할 class 속성 이름
+		 * @param  {string} context radioClass를 적용할 콘텍스트 선택자
+		 * @return {jQuery Object}  $() 인스턴스 객체
+		 */
+		$.fn.radioClass = function(name, context) {
+
+			// context의 기본 값 설정
+			// 사용자 정의 값이 있으면 덮어쓰기
+			context = context || '';
+
+			// 유효성검사
+			if ( $.type(name) !== 'string' ) {
+				throw new TypeError('전달된 name 인자는 문자열이어야 합니다.');
+			}
+			if ( $.type(context) !== 'string' ) {
+				throw new TypeError('전달된 context 인자는 문자열이어야 합니다.');
+			}
+
+			// context가 설정되어 있으면 this 인스턴스 객체로부터
+			// 가장 가까운 DOM 객체를 찾아 jQuery 인스턴스 객체를 반환
+			var _this = context ? this.closest(context) : this;
+
+			// jQuery 플러그인 내부의 this가 참조하는 것은?
+			// this가 참조하는 것은 $() 인스턴스 객체
+			_this.addClass(name);
+
+			// _this 인스턴스 객체의 형제 인스턴스 집합을 찾아서
+			var $siblings = _this.siblings();
+			// 집합 내부를 순환하여 name 클래스 속성 이름 값을 가진
+			// 아이템에서 name 클래스 속성 제거
+			$.each($siblings, function(index, el) {
+				var _$sibling = $siblings.eq(index);
+				if ( _$sibling.hasClass(name) ) {
+					_$sibling.removeClass(name);
+				}
+			});
+
+			// jQuery 체이닝을 위한 this 반환 설정
+			return this;
+
+		}; // 끝: $.fn.radioClass
+
+	} // 끝: if
+
+})(window, window.jQuery);
+```
+
+-
+
+#### AMD 방식으로 `jquery.radioClass` 플러그인 코드 변경
+
+```js
+/**
+ * AMD 모듈 정의
+ */
+define(['jquery'], function($) {
+
+	'use strict';
+
+	// $.fn.radioClass 플러그인이 존재하지 않는다면?
+	if ( !$.fn.radioClass ) {
+
+		/**
+		 * $.fn.radioClass 플러그인 정의
+		 * @param  {string} name    radioClass를 적용할 class 속성 이름
+		 * @param  {string} context radioClass를 적용할 콘텍스트 선택자
+		 * @return {jQuery Object}  $() 인스턴스 객체
+		 */
+		$.fn.radioClass = function(name, context) {
+
+			// context의 기본 값 설정
+			// 사용자 정의 값이 있으면 덮어쓰기
+			context = context || '';
+
+			// 유효성검사
+			if ( $.type(name) !== 'string' ) {
+				throw new TypeError('전달된 name 인자는 문자열이어야 합니다.');
+			}
+			if ( $.type(context) !== 'string' ) {
+				throw new TypeError('전달된 context 인자는 문자열이어야 합니다.');
+			}
+
+			// context가 설정되어 있으면 this 인스턴스 객체로부터
+			// 가장 가까운 DOM 객체를 찾아 jQuery 인스턴스 객체를 반환
+			var _this = context ? this.closest(context) : this;
+
+			// jQuery 플러그인 내부의 this가 참조하는 것은?
+			// this가 참조하는 것은 $() 인스턴스 객체
+			_this.addClass(name);
+
+			// _this 인스턴스 객체의 형제 인스턴스 집합을 찾아서
+			var $siblings = _this.siblings();
+			// 집합 내부를 순환하여 name 클래스 속성 이름 값을 가진
+			// 아이템에서 name 클래스 속성 제거
+			$.each($siblings, function(index, el) {
+				var _$sibling = $siblings.eq(index);
+				if ( _$sibling.hasClass(name) ) {
+					_$sibling.removeClass(name);
+				}
+			});
+
+			// jQuery 체이닝을 위한 this 반환 설정
+			return this;
+
+		}; // 끝: $.fn.radioClass
+
+	} // 끝: if
+
+});
+```
+
+-
+
+#### QUnit 테스트 코드
+
+###### QUnit API
+
+- QUnit.module()
+- QUnit.test()
+- assert.ok()
+- assert.strictEqual()
+
+```js
+(function(global, Q, $){
+	'use strict';
+
+	var class_name = 'clicked';
+
+	// Qunit 모듈 정의
+	Q.module('jquery.radioClass', {
+		beforeEach: function() {
+			var self = this;
+			self.name = class_name;
+			self.$demo = $('#demo');
+			self.$demo.on('click', 'li > a', function(e) {
+				e.preventDefault();
+				$(this).radioClass( self.name, 'li' );
+			});
+		}
+	});
+
+	Q.test('jQuery v1.x 버전을 사용하는가?', 2, function(A) {
+		// A.expect(2);
+		A.strictEqual($, window.jQuery, 'jQuery 사용 준비 완료!');
+		A.ok($.fn.jquery[0] === '1', 'jQuery 1.x 버전대 사용!');
+	});
+
+	Q.test('$.fn은 jQuery.prototype인가?', function(A){
+		A.strictEqual($.fn, jQuery.prototype, '$.fn은 jQuery.prototype이 맞습니다.');
+	});
+
+	Q.test('$.fn.radioClass가 존재하는가?', function(A){
+		A.ok($.fn.radioClass, '존재합니다.');
+	});
+
+	Q.test('#demo li:first-child > a 요소의 부모 요소에 "'+ class_name +'" class 속성이 추가되었는가?', function(A) {
+		var _demo = this.$demo,
+			_demo__a = _demo.find('li:first-child > a').trigger('click');
+		A.ok(_demo__a.parent().hasClass(this.name));
+	});
+
+})(window, window.QUnit, window.jQuery);
+```
+
+-
+
+#### AMD 방식으로 `jquery.radioClass` 활용 예시 - `src/main.js`
+
+```js
+require(['jquery.radioClass.test'], function() {
+
+	// 템플릿
+	var html_template = '';
+	html_template += '<li><a href="">야무 한글 로렘입숨.</a></li>';
+	html_template += '<li><a href="">흐르는, 고동소리?</a></li>';
+	html_template += '<li><a href="">티셔츠, 흐르는?</a></li>';
+	html_template += '<li><a href="">설레는, 운동화도.</a></li>';
+	html_template += '<li><a href="">청춘, 찬란한.</a></li>';
+
+	// 코드 동적 생성
+	$('<ul>',{
+		'id': 'after-demo',
+		'html': html_template,
+		'css': {
+			width: '10rem'
+		},
+		'on': {
+			'click': function(e) {
+				e.preventDefault();
+				$(e.target).radioClass('clicked', 'li');
+			}
+		}
+	})
+	.insertAfter('#demo')
+	// ul#after-demo > li:nth-child(3)
+	.find('li').eq(2)
+		// ul#after-demo > li:nth-child(3) > a
+		.children('a').trigger('click');
+
+});
+```
+
+---
+
 ### 다시 보는 RequireJS `r.js` 설정
 
 **단일 JS 파일을 만들고자 할 때**
