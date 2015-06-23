@@ -3,15 +3,24 @@ require.config({
 	baseUrl: '../src',
 
 	paths: {
+		'qunit'                  : '../libs/qunit/qunit',
 		'jquery'                 : '../libs/jquery.min',
+		// 'jquery.radioClass'      : 'jquery.radioClass',
 		'jquery.radioClass'      : 'amd.jquery.radioClass',
 		'jquery.radioClass.test' : '../test/jquery.radioClass.test',
 	},
 
 	shim: {
+		'qunit': {
+			exports: 'QUnit',
+		},
+		// 'jquery.radioClass': {
+		// 	exports: 'jQuery.fn.radioClass',
+		// 	deps: ['jquery']
+		// },
 		'jquery.radioClass.test': {
-			exports: 'jQuery.fn.radioClass',
 			deps: [
+				'qunit',
 				'jquery.radioClass'
 			]
 		}
@@ -22,10 +31,17 @@ require.config({
 });
 
 
-
-
-
 require(['jquery.radioClass.test'], function() {
+
+	/**
+	 * ------------------------------------
+	 * QUnit 비동기 실행
+	 * http://api.qunitjs.com/QUnit.start/
+	 * http://api.qunitjs.com/QUnit.config/
+	 * ------------------------------------
+	 */
+	// QUnit.config.autostart = false;
+	QUnit.start();
 
 	// 템플릿
 	var html_template = '';
