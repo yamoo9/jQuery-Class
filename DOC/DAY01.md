@@ -27,6 +27,11 @@ $ npm install {Module_name} # e.g) jquery 모듈설치: npm i jquery
 
 * [Cmder](http://gooseberrycreative.com/cmder/) 콘솔 에뮬레이터 for Windows
 
+아래와 같은 에러가 뜰 경우 해결책
+api-ms-win-crt-runtime-l1-1-0.dll
+* [For Windows 64-bit](http://download.microsoft.com/download/0/4/1/041224F6-A7DC-486B-BD66-BCAAF74B6919/vc_redist.x64.exe)
+* [For Windows 32-bit](http://download.microsoft.com/download/0/4/1/041224F6-A7DC-486B-BD66-BCAAF74B6919/vc_redist.x86.exe)
+
 -
 
 #### Node.js 환경변수 설정
