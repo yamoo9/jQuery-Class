@@ -1,0 +1,6 @@
+<snippet>
+	<content><![CDATA[${1:assert}.notOk(${2:state[Expression]}${3:, ${4:[message[String]]}});]]></content>
+	<tabTrigger>assert-notOk</tabTrigger>
+	<scope>source.js</scope>
+	<description>Assert - notOk()</description>
+</snippet>

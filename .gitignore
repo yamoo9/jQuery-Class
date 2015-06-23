@@ -1,3 +1,8 @@
+###TEMP###
+TEMP
+.TEMP
+bower_components
+
 ###Windows###
 
 # Windows image file caches
@@ -35,7 +40,8 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*

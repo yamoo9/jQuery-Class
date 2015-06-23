@@ -1,0 +1,19 @@
+#demo {
+	width: 10rem;
+}
+
+a {
+	display: inline-block;
+	vertical-align: top;
+	color: #fff;
+	text-decoration: none;
+}
+
+.clicked {
+	color: #FC4A54;
+	background: #eee;
+}
+
+.clicked a {
+	color: inherit;
+}

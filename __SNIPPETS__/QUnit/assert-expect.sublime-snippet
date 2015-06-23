@@ -1,0 +1,6 @@
+<snippet>
+	<content><![CDATA[${1:assert}.expect(${2:amount[Number]});]]></content>
+	<tabTrigger>assert-expect</tabTrigger>
+	<scope>source.js</scope>
+	<description>Assert - expect()</description>
+</snippet>

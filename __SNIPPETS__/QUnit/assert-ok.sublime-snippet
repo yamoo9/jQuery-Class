@@ -1,0 +1,6 @@
+<snippet>
+	<content><![CDATA[${1:assert}.ok(${2:state[Expression]}${3:, ${4:[message[String]]}});]]></content>
+	<tabTrigger>assert-ok</tabTrigger>
+	<scope>source.js</scope>
+	<description>Assert - ok()</description>
+</snippet>

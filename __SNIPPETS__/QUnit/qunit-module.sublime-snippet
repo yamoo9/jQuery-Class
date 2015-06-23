@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[${1:QUnit}.module(${2:name[String]}${3:, {
+	beforeEach: function() {$4\}${5:,
+	afterEach: function() {$6\}}
+\}});]]></content>
+	<tabTrigger>qunit-module</tabTrigger>
+	<scope>source.js</scope>
+	<description>QUnit - module()</description>
+</snippet>

@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[<!-- 시작: #qunit -->
+<div id="qunit"></div>
+${1:<div id="qunit-fixture"></div>
+}<!-- 끝: #qunit -->]]></content>
+	<tabTrigger>qunit-html</tabTrigger>
+	<description>QUnit 테스트</description>
+	<scope>text.html</scope>
+</snippet>
