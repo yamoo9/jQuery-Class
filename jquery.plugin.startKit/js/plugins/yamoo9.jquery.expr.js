@@ -7,16 +7,23 @@ define(function() {
 	 * --------------------------------
 	 */
 
-	if (!$.expr[':'].inline) {
-		$.expr[':'].inline = function(el, index, meta, items) {
-			return $(el).css('display') === 'inline';
+	var display_value = 'inline, block, inline-block, list-item'.split(', '),
+		k             = 0,
+		l             = display_value.length,
+		d_value;
+
+	for (; k<l; k++) {
+
+		d_value = display_value[k];
+
+		if (!$.expr[':'][d_value]) {
+			$.expr[':'][d_value] = function(el, index, meta) {
+				return $(el).css('display') === d_value;
+			}
 		}
+
 	}
-	if (!$.expr[':'].block) {
-		$.expr[':'].block = function(el, index, meta, items) {
-			return $(el).css('display') === 'block';
-		}
-	}
+
 
 
 
