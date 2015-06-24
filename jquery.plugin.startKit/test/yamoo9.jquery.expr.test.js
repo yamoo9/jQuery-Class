@@ -30,18 +30,18 @@
 	 * jQuery 플러그인 테스트 모듈 등록
 	 * --------------------------------
 	 */
-	Q.module('yamoo9.jquery.util 플러그인 테스트', {
-		beforeEach: function() {
-			// 각각의 테스트를 수행하기 전에 실행되는 코드
-		},
-		afterEach: function() {
-			// 각각의 테스트가 완료된 뒤에 실행
-		}
-	});
+	// Q.module('yamoo9.jquery.util 플러그인 테스트', {
+	// 	beforeEach: function() {
+	// 		// 각각의 테스트를 수행하기 전에 실행되는 코드
+	// 	},
+	// 	afterEach: function() {
+	// 		// 각각의 테스트가 완료된 뒤에 실행
+	// 	}
+	// });
 
-	Q.test('$.version 및 $.log()가 존재하는가?', 2, function(A){
-		A.ok($.version, '$.version 존재');
-		A.ok($.log, '$.log 존재');
-	});
+	// Q.test('$.version 및 $.log()가 존재하는가?', 2, function(A){
+	// 	A.ok($.version, '$.version 존재');
+	// 	A.ok($.log, '$.log 존재');
+	// });
 
 })(window, window.QUnit);
