@@ -22,7 +22,7 @@ require.config({
 
 	waitSeconds: 15,
 
-	urlArgs: 'ts:' + (new Date()).getSeconds()
+	urlArgs: 'ts:' + (new Date()).getTime()
 
 });
 
