@@ -4,15 +4,19 @@ define(function() {
 	/**
 	 * --------------------------------
 	 * display: inline 요소를 찾아야...
-	 *
 	 * --------------------------------
 	 */
 
-	// $.each($('div'), function(index, el) {
-	// 	return ( $('div').css('display') === 'inline' )
-	// });
-
-	// $('div:inline')
+	if (!$.expr[':'].inline) {
+		$.expr[':'].inline = function(el, index, meta, items) {
+			return $(el).css('display') === 'inline';
+		}
+	}
+	if (!$.expr[':'].block) {
+		$.expr[':'].block = function(el, index, meta, items) {
+			return $(el).css('display') === 'block';
+		}
+	}
 
 
 

@@ -30,7 +30,11 @@ require.config({
 			]
 		},
 
-		'yamoo9.jquery.expr.test': ['qunit', 'yamoo9.jquery.expr']
+		'yamoo9.jquery.expr.test': [
+			'qunit',
+			'yamoo9.jquery.util',
+			'yamoo9.jquery.expr'
+		]
 	},
 
 	waitSeconds: 15,
