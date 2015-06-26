@@ -1,5 +1,6 @@
 define('init', [
-	'jquery'
+	'jquery',
+	'jquery.dataLink'
 ],
 function($) {
 	'use strict';
