@@ -3,12 +3,12 @@ require.config({
 	baseUrl: '../js',
 
 	paths: {
-		'qunit': 'libs/qunit/qunit',
-		'jquery': 'libs/jquery.min',
-		'yamoo9.jquery.util': 'plugins/yamoo9.jquery.util',
-		'yamoo9.jquery.expr': 'plugins/yamoo9.jquery.expr',
-		'yamoo9.jquery.util.test': '../test/yamoo9.jquery.util.test',
-		'yamoo9.jquery.expr.test': '../test/yamoo9.jquery.expr.test',
+		'qunit'                   : 'libs/qunit/qunit',
+		'jquery'                  : 'libs/jquery.min',
+		'yamoo9.jquery.util'      : 'plugins/yamoo9.jquery.util',
+		'yamoo9.jquery.expr'      : 'plugins/yamoo9.jquery.expr',
+		'yamoo9.jquery.util.test' : '../test/yamoo9.jquery.util.test',
+		'yamoo9.jquery.expr.test' : '../test/yamoo9.jquery.expr.test',
 	},
 
 	shim: {

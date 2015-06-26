@@ -1,0 +1,6 @@
+#demo {
+	margin-top: 3rem;
+}
+#demo div:nth-child(even) {
+	display: inline;
+}
