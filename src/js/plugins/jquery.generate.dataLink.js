@@ -18,17 +18,33 @@ function() {
 	 */
 	if ( !$.fn.dataLink ) {
 		$.fn.dataLink = function() {
-			var self = this; // $() 인스턴스
+
+			var self = this.filter('[class*="slide-btn-"]'); // $() 인스턴스
 
 			// 체이닝
 			// return self;
 			return $.each(self, function(index, item) {
+
 				var $item = self.eq(index);
+
 				// console.log($(item).attr('href'));
 				// console.log($item.attr('href'));
 				// console.log(item.getAttribute('href').split('http://')[1]);
-				var link_path = $item.attr('href').replace('http://', '');
-				$item.attr('data-link', link_path);
+
+				var link_path = $item.attr('href'),
+					link      = link_path.replace('http://', '');
+
+				// console.log($item.text());
+
+				if (link_path.indexOf('http://') > -1) {
+					$item.attr('rel', 'external');
+				}
+
+				$item
+					.attr({
+						'data-link' : link,
+						'role'      : 'button'
+					});
 			});
 		};
 	}
