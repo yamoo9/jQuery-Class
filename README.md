@@ -6,183 +6,249 @@
 - [4일차 내용 요약](DOC/DAY04.md)
 - [5일차 내용 요약](DOC/DAY05.md)
 - [6일차 내용 요약](DOC/DAY06.md)
+- [7일차 내용 요약](DOC/DAY07.md)
 
 ---
 
+<<<<<<< HEAD
 ### [TDD] QUnit을 활용한 jQuery 플러그인 개발 테스트
 
 ![QUnit 테스트 뷰](GUIDE/QUnit-test-view.png)
 
 ※ `AMD` 키워드가 붙은 파일은 `requireJS`를 활용한 예시
+=======
+### jquery.plugin.startKit
+>>>>>>> DAY08
 
 ```sh
 .
-├── libs/
-│   ├── jquery.min.js
-│   ├── qunit/
-│   │   ├── qunit.css
-│   │   ├── qunit.js
-│   │   └── theme/
-│   │       ├── qunit-theme-burce.css
-│   │       ├── qunit-theme-gabe.css
-│   │       ├── qunit-theme-ninja.css
-│   │       └── qunit-theme-nv.css
-│   └── require.js # AMD
-├── src/
-│   ├── amd.jquery.radioClass.js # AMD
-│   ├── jquery.radioClass.js
-│   └── main.js # AMD
-└── test/
-    ├── jquery.radioClass.test.js
-    ├── test-amd.html # AMD
+├── css
+│   └── style.css
+├── index.html
+├── js
+│   ├── libs
+│   │   ├── jquery.min.js
+│   │   ├── qunit
+│   │   │   ├── qunit.css
+│   │   │   ├── qunit.js
+│   │   │   └── theme
+│   │   │       ├── qunit-theme-burce.css
+│   │   │       ├── qunit-theme-gabe.css
+│   │   │       ├── qunit-theme-ninja.css
+│   │   │       └── qunit-theme-nv.css
+│   │   └── require.js
+│   ├── main.js
+│   └── plugins
+│       ├── yamoo9.jquery.expr.js # 플러그인
+│       └── yamoo9.jquery.util.js # 플러그인
+└── test
     ├── test.css
-    └── test.html
+    ├── test.html
+    ├── test.js
+    ├── yamoo9.jquery.expr.test.js # 플러그인 테스트
+    └── yamoo9.jquery.util.test.js # 플러그인 테스트
 ```
 
 -
 
-#### `jquery.radioClass` 플러그인 작성
+
+### jQuery 유틸리티 메소드 확장
 
 ```js
-// 전역이 오염되지 않도록 별도의 공간을 생성
-// 스코프 함수 (즉시 실행되는 함수 내부)
-(function(global, $){
-	'use strict';
+define([
+  'jquery'
+],
+function($) {
+  'use strict';
 
-	// $.fn.radioClass 플러그인이 존재하지 않는다면?
-	if ( !$.fn.radioClass ) {
+  /**
+   * jQuery 표준
+   * $.fn.jquery, $().jquery
+   * ----------------------------
+   * 사용자 정의
+   * $.version
+   */
+  if (!$.version) {
+    $.version = $().jquery;
+  }
 
-		/**
-		 * $.fn.radioClass 플러그인 정의
-		 * @param  {string} name    radioClass를 적용할 class 속성 이름
-		 * @param  {string} context radioClass를 적용할 콘텍스트 선택자
-		 * @return {jQuery Object}  $() 인스턴스 객체
-		 */
-		$.fn.radioClass = function(name, context) {
+  /**
+   * jQuery 표준
+   * $.expr[':']
+   * ----------------------------
+   * 사용자 정의
+   * $.ex
+   */
+  if (!$.ex) {
+    $.ex = $.expr[':'];
+  }
 
-			// context의 기본 값 설정
-			// 사용자 정의 값이 있으면 덮어쓰기
-			context = context || '';
+  /**
+   * Console 표준
+   * console.log()
+   * ----------------------------
+   * 사용자 정의
+   * $.log()
+   */
+  if (!$.log) {
+    $.log = function(arg) {
+      if (window.console) {
+        console.log(arg);
+      }
+    };
+  }
 
-			// 유효성검사
-			if ( $.type(name) !== 'string' ) {
-				throw new TypeError('전달된 name 인자는 문자열이어야 합니다.');
-			}
-			if ( $.type(context) !== 'string' ) {
-				throw new TypeError('전달된 context 인자는 문자열이어야 합니다.');
-			}
+  /**
+   * jQuery 표준
+   * $(this) x α
+   * ----------------------------
+   * 사용자 정의
+   * $.$(this)
+   */
+  if ( !$.$ ) {
+    $.$ = function(el) {
+      // if ( !$.data(el, '@this') ) {
+      //  $.data(el, '@this', $(el));
+      // }
 
-			// context가 설정되어 있으면 this 인스턴스 객체로부터
-			// 가장 가까운 DOM 객체를 찾아 jQuery 인스턴스 객체를 반환
-			var _this = context ? this.closest(context) : this;
+      // return $.data(el, '@this');
+      //
+      return $.data(el, '@this') || $.data(el, '@this', $(el));
+    }
+  }
 
-			// jQuery 플러그인 내부의 this가 참조하는 것은?
-			// this가 참조하는 것은 $() 인스턴스 객체
-			_this.addClass(name);
-
-			// _this 인스턴스 객체의 형제 인스턴스 집합을 찾아서
-			var $siblings = _this.siblings();
-			// 집합 내부를 순환하여 name 클래스 속성 이름 값을 가진
-			// 아이템에서 name 클래스 속성 제거
-			$.each($siblings, function(index, el) {
-				var _$sibling = $siblings.eq(index);
-				if ( _$sibling.hasClass(name) ) {
-					_$sibling.removeClass(name);
-				}
-			});
-
-			// jQuery 체이닝을 위한 this 반환 설정
-			return this;
-
-		}; // 끝: $.fn.radioClass
-
-	} // 끝: if
-
-})(window, window.jQuery);
-```
-
--
-
-#### AMD 방식으로 `jquery.radioClass` 플러그인 코드 변경
-
-```js
-/**
- * AMD 모듈 정의
- */
-define(['jquery'], function($) {
-
-	'use strict';
-
-	// $.fn.radioClass 플러그인이 존재하지 않는다면?
-	if ( !$.fn.radioClass ) {
-
-		/**
-		 * $.fn.radioClass 플러그인 정의
-		 * @param  {string} name    radioClass를 적용할 class 속성 이름
-		 * @param  {string} context radioClass를 적용할 콘텍스트 선택자
-		 * @return {jQuery Object}  $() 인스턴스 객체
-		 */
-		$.fn.radioClass = function(name, context) {
-
-			// context의 기본 값 설정
-			// 사용자 정의 값이 있으면 덮어쓰기
-			context = context || '';
-
-			// 유효성검사
-			if ( $.type(name) !== 'string' ) {
-				throw new TypeError('전달된 name 인자는 문자열이어야 합니다.');
-			}
-			if ( $.type(context) !== 'string' ) {
-				throw new TypeError('전달된 context 인자는 문자열이어야 합니다.');
-			}
-
-			// context가 설정되어 있으면 this 인스턴스 객체로부터
-			// 가장 가까운 DOM 객체를 찾아 jQuery 인스턴스 객체를 반환
-			var _this = context ? this.closest(context) : this;
-
-			// jQuery 플러그인 내부의 this가 참조하는 것은?
-			// this가 참조하는 것은 $() 인스턴스 객체
-			_this.addClass(name);
-
-			// _this 인스턴스 객체의 형제 인스턴스 집합을 찾아서
-			var $siblings = _this.siblings();
-			// 집합 내부를 순환하여 name 클래스 속성 이름 값을 가진
-			// 아이템에서 name 클래스 속성 제거
-			$.each($siblings, function(index, el) {
-				var _$sibling = $siblings.eq(index);
-				if ( _$sibling.hasClass(name) ) {
-					_$sibling.removeClass(name);
-				}
-			});
-
-			// jQuery 체이닝을 위한 this 반환 설정
-			return this;
-
-		}; // 끝: $.fn.radioClass
-
-	} // 끝: if
+  /**
+   * jQuery 표준
+   * $(el), $(el).index(), meta[3]
+   * ----------------------------
+   * 사용자 정의
+   * config.el, config.index, config.meta
+   */
+  $.$config = function(el, meta) {
+    return {
+      el    : $.$(el),
+      index : this.el.index(),
+      meta  : (meta ? meta[3] : null)
+    };
+  };
 
 });
 ```
 
 -
 
-#### QUnit 테스트 코드
-
-###### QUnit API
-
-- QUnit.module()
-- QUnit.test()
-- assert.ok()
-- assert.strictEqual()
+### jQuery.expr[':'] 확장
 
 ```js
+define([
+  'jquery',
+  'yamoo9.jquery.util'
+],
+function($) {
+  'use strict';
+
+  /**
+   * 참고 URL
+   * https://coderwall.com/p/gdt7ga/custom-jquery-selectors-using-expressions
+   * http://malsup.com/jquery/expr/
+   */
+
+  /**
+   * jQuery 표준
+   * $('span[class*="icon-"]');
+   * ----------------------------
+   * 사용자 정의
+   * $('span:icon');
+   */
+  $.expr[':'].icon = function(el, index, meta) {
+    return el.className.toLowerCase().match('icon-');
+  };
+
+  /**
+   * jQuery 표준
+   * $('span[class*="icon-"][class*="-mega"]');
+   * ----------------------------
+   * 사용자 정의
+   * $("span:icon(mega)");
+   */
+  $.expr[':'].icon = function(el, index, meta) {
+    var _meta = meta[3],
+      cn = el.className.toLowerCase();
+    return _meta ? ( cn.match('icon-') && cn.match(_meta) ) : cn.match('icon-');
+  };
+
+  /**
+   * 사용자 정의 디버깅
+   * $('span:first:debug');
+   */
+  $.expr[':'].debug = function(el, index, meta) {
+    console.log('--- DEBUG ---', '\nel: ', el, '\nindex: ', index, '\nmeta: ', meta[3], '\n--- // DEBUG ---');
+    // console.log('--- DEBUG ---');
+    // console.log('el: ', el);
+    // console.log('index: ', index);
+    // console.log('meta: ', meta[3]);
+    // console.log('--- // DEBUG ---');
+  };
+
+  /**
+   * jQuery 표준
+   * $('span:nth-child(3n)');
+   * ----------------------------
+   * 사용자 정의
+   * $('span:nth(3)');
+   */
+  $.expr[':'].nth = function(el, index, meta) {
+    var config = $.$config(el, meta);
+    if(!config.meta) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
+    return (config.index + 1) % config.meta === 0;
+  };
+
+  /**
+   * jQuery 표준
+   * $('span').each(function(index, el) { return $(this).css('display') === 'block' });
+   * -----------------------------------------------------------------------------------
+   * 사용자 정의
+   * $('span:block');
+   */
+  var filter = 'inline, inline-block, block, list-item'.split(', '),
+    k      = 0,
+    l      = filter.length;
+
+  for(; k<l; k++) {
+    (function(display_value){
+      $.expr[':'][display_value] = function(el, index, meta) {
+        var config = $.$config(el, meta);
+        return config.el.css('display') === display_value;
+      }
+    })(filter[k]);
+  }
+
+  /**
+   * jQuery 표준
+   * $("a.btn.new-repo").data("button", "new-repo");
+   * ----------------------------
+   * 사용자 정의
+   * $("a:button(new-repo)");
+   */
+  $.expr[':'].btn = function(el, index, meta) {
+    var config = $.$config(el, meta);
+    return config.el.hasClass('btn') && config.el.data('btn', config.meta);
+  };
+
+});
+```
+
+-
+
+### QUnit 비동기 실행
+```js
+<<<<<<< HEAD
 (function(global, Q, $){
 	'use strict';
 
 	var class_name = 'clicked';
 
-	// Qunit 모듈 정의
+	// QUnit 모듈 정의
 	Q.module('jquery.radioClass', {
 		beforeEach: function() {
 			var self = this;
@@ -216,183 +282,205 @@ define(['jquery'], function($) {
 	});
 
 })(window, window.QUnit, window.jQuery);
-```
+=======
+require([
+  'jquery.radioClass.test'
+],
+function() {
 
--
+  /**
+   * ------------------------------------
+   * QUnit 비동기 실행
+   * http://api.qunitjs.com/QUnit.start/
+   * http://api.qunitjs.com/QUnit.config/
+   * ------------------------------------
+   */
 
-#### AMD 방식으로 `jquery.radioClass` 활용 예시 - `src/main.js`
-
-```js
-require(['jquery.radioClass.test'], function() {
-
-	// 템플릿
-	var html_template = '';
-	html_template += '<li><a href="">야무 한글 로렘입숨.</a></li>';
-	html_template += '<li><a href="">흐르는, 고동소리?</a></li>';
-	html_template += '<li><a href="">티셔츠, 흐르는?</a></li>';
-	html_template += '<li><a href="">설레는, 운동화도.</a></li>';
-	html_template += '<li><a href="">청춘, 찬란한.</a></li>';
-
-	// 코드 동적 생성
-	$('<ul>',{
-		'id': 'after-demo',
-		'html': html_template,
-		'css': {
-			width: '10rem'
-		},
-		'on': {
-			'click': function(e) {
-				e.preventDefault();
-				$(e.target).radioClass('clicked', 'li');
-			}
-		}
-	})
-	.insertAfter('#demo')
-	// ul#after-demo > li:nth-child(3)
-	.find('li').eq(2)
-		// ul#after-demo > li:nth-child(3) > a
-		.children('a').trigger('click');
+  // QUnit.config.autostart = false;
+  QUnit.start();
 
 });
+>>>>>>> DAY08
 ```
 
----
+-
 
-### 다시 보는 RequireJS `r.js` 설정
+### jQuery 유틸리티 메소드
+유틸리티 메소드는 정적 메소드(Static Method)로 jQuery 함수의 속성을 말합니다.
 
-**단일 JS 파일을 만들고자 할 때**
 ```js
-({
-	// r.js 설정 API
-	// https://github.com/jrburke/r.js/blob/master/build/example.build.js
-
-	// 모듈 이름
-	name: 'main',
-
-	// 기본 경로
-	// build/ 디렉토리 기준으로 설정
-	// (현재 build 기준이기 때문에 배포할 기준의 js 로 이동하기 위해 build 폴더에서 나가서 js로 설정)
-	baseUrl: '../js',
-
-	// RequireJS - main.js 파일 위치
-	mainConfigFile: "../js/main.js",
-
-	// build 할 JS 파일디렉터리와 js 파일명을 출력 설정
-	out: "../js/build/build.min.js",
-
-	// 삽입할 라이브러리 설정
-	include: ["requireLib"],
-
-	// 경로 설정
-	paths: {
-			requireLib: 'libs/require',
-			/**
-			 * https://github.com/jrburke/requirejs/issues/791
-			 * http://www.anthb.com/2014/07/04/optimising-requirejs-with-cdn-fallback
-			 * http://requirejs.org/docs/optimization.html#empty
-			 */
-			'jquery': 'empty:'
-	},
-
-	// 최적화 설정
-	optimize: "uglify2", // "none", "uglify2", "uglify"
-
-	// 소스맵 생성 설정
-	// #uglify를 쓸 때는 소스맵을 못 쓴다. uglify2를 쓰면 가능하다.
-	generateSourceMaps: true, // 소스맵은 오류가 난 js를 알려준다. 압축된 js는 찾기가 어렵기 때문에 소스맵이 있어야 오류 파일의 라인을 알려준다.
-
-	// 저작권 주석 보존 설정
-	preserveLicenseComments: false,
-})
+// jQuery Utility Methods 예시
+jQuery.each();
+$.ajax();
+$.proxy();
+.
+.
+.
 ```
 
-**프로젝트 파일 모두 최적화할 경우**
+-
+
+#### 데이터 유형 체크 jQuery 유틸리티 메소드(함수)
+
 ```js
-({
-	// modules 속성을 사용하면 프로젝트의 모든 파일을 최적화, dir 속성 함께 사용해야 함.
-	// http://requirejs.org/docs/optimization.html#wholeproject
-	modules: [{
-		name: "main",
-		exclude: ['jquery']
-	}],
+$.isNumeric(number);
+$.isFunction(function);
+$.isArray(array);
+$.isEmptyObject(object);
+$.isPlainObject(object);
+$.isXmlDoc(doc);
+$.type(object); // ★★★★★
+```
 
-	// modules와 함게 사용
-	dir: "../dist",
+##### `$.type` 함수가 반환하는 데이터 유형
+- `number` - 숫자
+- `string` - 문자
+- `boolean` - 논리
+- `function` - 함수
+- `array` - 배열
+- `object` - 객체
+- `date` - 날짜
+- `regexp` - 정규표현식
+- `undefined`
+- `null`
 
-	baseUrl: "../js",
+-
 
-	mainConfigFile: "../js/main.js",
+[DEMO v1](http://jsbin.com/vubefujowu/2/edit?js,output)
 
-	include: ["requireLib"],
+```js
+var callToAction, callbackFn;
 
-	paths: {
-		requireLib : 'libs/require',
-		'jquery'   : 'empty:'
-	},
+callToAction = function (count, delay, fn) {
+  var i = 0;
 
-	optimize                : "uglify2",
+  (function loopIt(){
+    i++;
+    fn();
+    if (i < count) {
+      setTimeout(loopIt, delay);
+    }
+  }());
+};
 
-	generateSourceMaps      : true,
+callbackFn = function () {
+  $('.out').append('<p>function called</p>');
+};
 
-	preserveLicenseComments : false,
+callToAction(3, 400, callbackFn);
+```
 
-	// true로 설정하면 빌드되어 번들된 파일을 출력 폴더에서 제거함.
-	// removeCombined: true,
+[DEMO v2](http://jsbin.com/zimuvunura/2/edit?js,output)
 
-	// 중첩된 의존 JS 찾기
-	// findNestedDependencies: true,
-})
+```js
+var callToAction, callbackFn;
+
+callToAction = function () {
+  var args = arguments; // 함수 전달인자 유사배열
+  var count = $.isNumeric(args[0]) ? args[0]: 3;
+  var delay = $.isNumeric(args[1]) ? args[1]: 400;
+  var fn = $.isFunction(args[0]) ?
+              args[0] :
+              $.isFunction(args[1]) ?
+                args[1] :
+                args[2];
+
+  var i = 0;
+
+  (function loopIt(){
+    i++;
+    fn();
+    if (i < count) {
+      setTimeout(loopIt, delay);
+    }
+  }());
+};
+
+callbackFn = function () {
+  $('.out').append('<p>함수 호출됨.</p>');
+};
+
+callToAction(6, 200, callbackFn);
 ```
 
 -
 
-### jQuery를 효율적으로 작성하는 21가지 방법
-- [jQuery 코드는 이렇게 작성하세요](DOC/modules/better-writing-jquery.md)
+#### 콜렉션 조작(Collection Manipulation) 유틸리티 메소드
+- makeArray
+- inArray
+	- return 1 또는 index
+	- 전달인자(옵션)
+- unique
+- merge
+- map
+	- $().map()
+	- $.map()
+- grep
+	- 전달인자 반전
+	- return 배열
+
+[데모](http://jsbin.com/qatomelozo/1/edit?js,console)
+
+```js
+/**
+ * makeArray : 배열로 만듬
+ * inArray : 배열 내부에 아이템이 존재할 경우, 인덱스 반환
+ * $.inArray(item, array);
+ * unique : 중복되는 배열 원소를 하나만 남겨둠
+ * $.unique(array);
+ * merge : 배열을 병합
+ * $.merge(array1, array2);
+ * map : 배열 원소를 순환하여 처리한 결과를 각 원소에 반영 후 반환
+ * $.map(array, function(item, idx){});
+ * grep : 특정 원소를 조건에 따라 솎아냄
+ * $.grep(array, function(item, idx){})
+ */
+
+var arr1 = [2015, 6, 23, 6, 2015];
+var arr2 = [2, 5, 8, 12, 11];
+
+console.log($.isArray(arr1)); // true
+
+console.log($.inArray(2015, arr1)); // 1
+
+if ( $.inArray(2015, arr1) !== -1 ) {
+  console.log('2015는 arr1 배열 내부 원소입니다.');
+}
+
+if ( $.inArray(9, arr2) !== -1 ) {
+  console.log('9는 arr2 배열 내부 원소입니다.');
+} else {
+  console.log('9는 arr2 배열 내부 원소가 아닙니다.');
+}
+
+arr1 = $.unique(arr1);
+
+console.log(arr1); // [2015, 6, 23]
+
+var newArr = $.merge(arr1, arr2);
+
+console.log(newArr); // [2015, 6, 23, 2, 5, 8, 12, 11]
+
+arr2 = $.map(arr2, function(item, idx) {
+  return parseInt( (item * item) / (idx===0 ? 2 : idx), 10 );
+});
+
+console.log(arr2); // [2, 25, 32, 48, 30]
+
+newArr = $.grep(newArr, function(item){
+   return item % 3 === 0;
+});
+
+console.log(newArr); // [6, 12]
+
+$(function() {
+  var mArr = $.makeArray( $('li') );
+  console.log(mArr.length); // 7
+});
+
+```
 
 -
 
-### jQuery 플러그인 제작 방법
-- [jQuery 플러그인 API](http://learn.jquery.com/plugins/)
-- [jQuery 플러그인 제작 - 기본](DOC/making-jquery-plugin/01-plugin-basic.md)
-- [jQuery 플러그인 제작 - 중급](DOC/making-jquery-plugin/01-plugin-advanced.md)
-
--
-
-### jQuery 커스텀 빌드
-`Custom Build`
-
-- [jQuery + Grunt 사용자정의 빌드](https://github.com/jquery/jquery#how-to-build-your-own-jquery)
-- [jQuery-builder 사용자정의 빌더](DOC/modules/jquery-builder.md)
-- [야무의 영상강의: Custom Building jQuery on Windows](http://yamoo9.net/custom-building-jquery-on-windows/)
-
--
-
-### Javascript 단위 테스트
-`Unit Test`
-
-**단위 테스트란?**
-컴퓨터 프로그래밍에서 소스 코드의 특정 모듈이 의도된 대로 정확히 작동하는지 검증하는 절차다. 즉, 모든 함수와 메소드에 대한 테스트 케이스(Test case)를 작성하는 절차를 말한다. 이를 통해서 언제라도 코드 변경으로 인해 문제가 발생할 경우, 단시간 내에 이를 파악하고 바로 잡을 수 있도록 해준다.
-
-이상적으로, 각 테스트 케이스는 서로 분리되어야 한다. 이를 위해 가짜 객체(Mock object)를 생성하는 것도 좋은 방법이다. 유닛 테스트는 (일반적인 테스트와 달리) 개발자(developer) 뿐만 아니라 보다 더 심도있는 테스트를 위해 테스터(tester)에 의해 수행되기도 한다. [WIKI 문서 상세 읽기](https://ko.wikipedia.org/wiki/%EC%9C%A0%EB%8B%9B_%ED%85%8C%EC%8A%A4%ED%8A%B8)
-
-- **왜 유닛 테스트를 해야 하는가?**
-	- [왜 유닛 테스트를 해야 하는가? Part.1](http://blog.powerumc.kr/264)
-	- [왜 유닛 테스트를 해야 하는가? Part.2](http://blog.powerumc.kr/265)
-
-- **TDD `Test-driven Development`**
-	- [TDD란?](http://blog.powerumc.kr/220) - 테스트 주도 개발
-
-- **BDD `Behavior-driven Development`**
-	- [BDD란?](http://blog.powerumc.kr/221) - 행위 주도 개발
-
-### Javascript 단위 테스트 프레임워크
-`Unit Test Frameworks`
-
-- [TDD] [QUnit](http://qunitjs.com/) - jQuery 테스트 프레임워크
-- [BDD] [Jasmine](http://jasmine.github.io/) [*](http://blog.outsider.ne.kr/673)
-- [TDD/BDD] [Mocha](http://mochajs.org/) [*](http://blog.outsider.ne.kr/770)
-
-### Javascript 테스크 러너
-`Task Runner`
-
-- [Karma](http://karma-runner.github.io/0.12/index.html) [*](http://blog.outsider.ne.kr/1020) [**](http://www.itworld.co.kr/news/86538)
+### 온라인 Markdown 에디터
+[Stackedit Editor](https://stackedit.io/)
