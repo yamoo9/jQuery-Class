@@ -340,14 +340,14 @@ require(['jquery.radioClass.test'], function() {
 -
 
 ### jQuery를 효율적으로 작성하는 21가지 방법
-- [jQuery 코드는 이렇게 작성하세요](DOC/modules/better-writing-jquery.md)
+- [jQuery 코드는 이렇게 작성하세요](modules/better-writing-jquery.md)
 
 -
 
 ### jQuery 플러그인 제작 방법
 - [jQuery 플러그인 API](http://learn.jquery.com/plugins/)
-- [jQuery 플러그인 제작 - 기본](DOC/making-jquery-plugin/01-plugin-basic.md)
-- [jQuery 플러그인 제작 - 중급](DOC/making-jquery-plugin/01-plugin-advanced.md)
+- [jQuery 플러그인 제작 - 기본](making-jquery-plugin/01-plugin-basic.md)
+- [jQuery 플러그인 제작 - 중급](making-jquery-plugin/01-plugin-advanced.md)
 
 -
 
@@ -355,7 +355,7 @@ require(['jquery.radioClass.test'], function() {
 `Custom Build`
 
 - [jQuery + Grunt 사용자정의 빌드](https://github.com/jquery/jquery#how-to-build-your-own-jquery)
-- [jQuery-builder 사용자정의 빌더](DOC/modules/jquery-builder.md)
+- [jQuery-builder 사용자정의 빌더](modules/jquery-builder.md)
 - [야무의 영상강의: Custom Building jQuery on Windows](http://yamoo9.net/custom-building-jquery-on-windows/)
 
 -
