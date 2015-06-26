@@ -10,15 +10,7 @@
 
 ---
 
-<<<<<<< HEAD
-### [TDD] QUnit을 활용한 jQuery 플러그인 개발 테스트
-
-![QUnit 테스트 뷰](GUIDE/QUnit-test-view.png)
-
-※ `AMD` 키워드가 붙은 파일은 `requireJS`를 활용한 예시
-=======
 ### jquery.plugin.startKit
->>>>>>> DAY08
 
 ```sh
 .
@@ -50,7 +42,6 @@
 ```
 
 -
-
 
 ### jQuery 유틸리티 메소드 확장
 
