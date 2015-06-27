@@ -1,85 +1,105 @@
+@import url(http://fonts.googleapis.com/css?family=Exo+2:100);
+
 html {
 	font-size: 16px;
 }
 
 body {
+	height: 100vh;
 	margin: 0;
-	background: #FC414B;
 	color: #fff;
+	background: #FC414B -webkit-linear-gradient(#fc414b, #931A25);
+	background: #FC414B linear-gradient(#fc414b, #931A25);
+	letter-spacing: -0.04em;
+}
+
+body * {
+	margin: 0;
+	font-family: "Exo 2", sans-serif;
+	font-weight: 100;
 }
 
 a {
 	color: inherit;
+	line-height: 1.5;
+}
+
+h1 {
+	margin-bottom: 24px;
+	margin-bottom: 1.5rem;
+}
+
+p {
+	margin-bottom: 1rem;
+	color: #FACED2;
 }
 
 .container {
-	max-width: 800px;
-	max-width: 50em; /* Equal M */
-	max-width: 50rem; /* rool Element base EM */
-	margin: 100px auto;
+	max-width: 640px;
+	max-width: 40rem; /* rool Element base EM */
+	margin: 0 auto;
+	padding-top: 100px;
+	padding-top: 6.25rem;
 }
 
 /* 슬라이드 버튼 기본 스타일 모듈 */
-a[class*='slide-btn-'] {
-	overflow:        hidden;
-	position:        relative;
-	display:         inline-block;
-	vertical-align:  bottom;
+a[class*="slide-btn-"] {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	border-bottom: 2px solid #EF747E;
+	padding-right: 0.3em;
+	padding-left: 0.3em;
+	color: #fff;
+	vertical-align: bottom;
 	text-decoration: none;
-	padding-left:    0.19em;
-	padding-right:   0.19em;
 }
 
-a[class*='slide-btn-']::before {
-	content:    attr(data-link);
-	position:   absolute;
-	top:        0;
-	left:       0;
-	width:      inherit;
-	height:     inherit;
-	padding-left: 0.19em;
-	padding-right: 0.19em;
-	background: #34C0FF;
-	color:      #fff;
-	text-align: center;
-	transition: all 200ms linear;
+a[class*="slide-btn-"]:hover,
+a[class*="slide-btn-"]:focus {
+	border-bottom-color: #34c0ff;
 }
-a[class*='slide-btn-']:hover::before {
-	transition: all 200ms linear;
+
+a[class*="slide-btn-"]::before {
+	content: attr(data-linktext);
+	position: absolute;
+	color: #fff;
+	background: #34C0FF;
+	text-align: center;
+	-webkit-transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+/* 방향 스타일 초기화 모듈 */
+a[class*="slide-btn-"]:hover::before,
+a[class*="slide-btn-"]:focus::before {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+a[class*="slide-btn-"]:focus {
+	outline: none;
 }
 
 /* 방향 스타일 모듈 */
-a[class*='-left']::before {
-	left:  -100%;
+a[class*="-left"]::before {
 	right: 100%;
-}
-a[class*='-right']::before {
-	left:  100%;
-	right: -100%;
-}
-a[class*='-top']::before {
-	top:    -100%;
-	bottom: 100%;
-}
-a[class*='-bottom']::before {
-	top:    100%;
-	bottom: -100%;
+	left: -100%;
 }
 
-/* 슬라이드 스타일 모듈 */
-a[class*='-left']:hover::before {
-	left: 0;
-	right: auto;
+a[class*="-right"]::before {
+	right: -100%;
+	left: 100%;
 }
-a[class*='-right']:hover::before {
-	left: auto;
-	right: 0;
+
+a[class*="-top"]::before {
+	top: -100%;
+	bottom: 100%;
 }
-a[class*='-top']:hover::before {
-	top: 0;
-	bottom: auto;
-}
-a[class*='-bottom']:hover::before {
-	top: auto;
-	bottom: 0;
+
+a[class*="-bottom"]::before {
+	top: 100%;
+	bottom: -100%;
 }

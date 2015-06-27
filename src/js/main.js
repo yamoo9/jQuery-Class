@@ -10,11 +10,14 @@ require.config({
 	shim: {
 		'jquery.dataLink': {
 			deps    : ['jquery'],
-			exports : '$.fn.dataLink'
+			// exports : '$.fn.dataLink'
 		}
 	},
 
+	waitSeconds: 20,
+
 	urlArgs : 'ts=' + (new Date()).getTime()
+
 });
 
 require(['init']);
