@@ -138,7 +138,7 @@ p {
 
 .container {
 	max-width: 640px;
-	max-width: 40rem; /* rool Element base EM */
+	max-width: 40rem; /* Root Element base EM */
 	margin: 0 auto;
 	padding-top: 100px;
 	padding-top: 6.25rem;
