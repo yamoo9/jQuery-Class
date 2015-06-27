@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta charset="UTF-8">
+	<title>문서 제목</title>
+	<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<!-- // <script src="jquery.js"></script> -->
+	<script>
+		(function($){
+			$.$ = function(el) {
+				if ( !$.data(el, 'this') ) { $.data(el, 'this', $(el)) }
+				return $.data(el, 'this');
+			};
+
+			$.expr[':'].third = function(el, index, meta) {
+				var idx = $.$(el).index();
+				return (idx+1) % 3 === 0;
+			};
+
+			$.expr[':'].nth = function(el, index, meta) {
+				var $this = $.$(el),
+					_index = $this.index(),
+					_meta = meta[3];
+				if(!_meta) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
+				return (_index+1) % _meta === 0;
+			};
+		})(window.jQuery);
+	</script>
+</head>
+<body>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+	<div>div</div>
+<script>
+
+</script>
+</body>
+</html>
