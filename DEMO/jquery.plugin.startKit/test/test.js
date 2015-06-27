@@ -13,7 +13,11 @@ require.config({
 
 	shim: {
 		'qunit': {
-			exports: 'QUnit'
+			exports: 'QUnit',
+			init: function(QUnit) {
+				Qunit.config.autoLoad = false;
+				Qunit.config.autoStart = false;
+			}
 		},
 
 		'jquery': {
@@ -44,5 +48,6 @@ require.config({
 });
 
 require(['yamoo9.jquery.expr.test'], function() {
+	QUnit.load();
 	QUnit.start();
 });

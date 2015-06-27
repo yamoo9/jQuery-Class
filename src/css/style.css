@@ -1,0 +1,105 @@
+@import url(http://fonts.googleapis.com/css?family=Exo+2:100);
+
+html {
+	font-size: 16px;
+}
+
+body {
+	height: 100vh;
+	margin: 0;
+	color: #fff;
+	background: #FC414B -webkit-linear-gradient(#fc414b, #931A25);
+	background: #FC414B linear-gradient(#fc414b, #931A25);
+	letter-spacing: -0.04em;
+}
+
+body * {
+	margin: 0;
+	font-family: "Exo 2", sans-serif;
+	font-weight: 100;
+}
+
+a {
+	color: inherit;
+	line-height: 1.5;
+}
+
+h1 {
+	margin-bottom: 24px;
+	margin-bottom: 1.5rem;
+}
+
+p {
+	margin-bottom: 1rem;
+	color: #FACED2;
+}
+
+.container {
+	max-width: 640px;
+	max-width: 40rem; /* rool Element base EM */
+	margin: 0 auto;
+	padding-top: 100px;
+	padding-top: 6.25rem;
+}
+
+/* 슬라이드 버튼 기본 스타일 모듈 */
+a[class*="slide-btn-"] {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	border-bottom: 2px solid #EF747E;
+	padding-right: 0.3em;
+	padding-left: 0.3em;
+	color: #fff;
+	vertical-align: bottom;
+	text-decoration: none;
+}
+
+a[class*="slide-btn-"]:hover,
+a[class*="slide-btn-"]:focus {
+	border-bottom-color: #34c0ff;
+}
+
+a[class*="slide-btn-"]::before {
+	content: attr(data-linktext);
+	position: absolute;
+	color: #fff;
+	background: #34C0FF;
+	text-align: center;
+	-webkit-transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+/* 방향 스타일 초기화 모듈 */
+a[class*="slide-btn-"]:hover::before,
+a[class*="slide-btn-"]:focus::before {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+a[class*="slide-btn-"]:focus {
+	outline: none;
+}
+
+/* 방향 스타일 모듈 */
+a[class*="-left"]::before {
+	right: 100%;
+	left: -100%;
+}
+
+a[class*="-right"]::before {
+	right: -100%;
+	left: 100%;
+}
+
+a[class*="-top"]::before {
+	top: -100%;
+	bottom: 100%;
+}
+
+a[class*="-bottom"]::before {
+	top: 100%;
+	bottom: -100%;
+}
