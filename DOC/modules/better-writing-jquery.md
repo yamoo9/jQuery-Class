@@ -92,7 +92,6 @@ Better
 var $first  = $('.first'),
 	$second = $('.second'),
 	value   = $first.val();
-```
 
 #### 5. `on`메소드 사용을 선호하라.
 
