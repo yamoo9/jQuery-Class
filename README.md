@@ -7,471 +7,346 @@
 - [5일차 내용 요약](DOC/DAY05.md)
 - [6일차 내용 요약](DOC/DAY06.md)
 - [7일차 내용 요약](DOC/DAY07.md)
+- [8일차 내용 요약](DOC/DAY08.md)
 
 ---
 
-### jquery.plugin.startKit
+### jQuery.fn.dataLink() 플러그인 제작
 
-```sh
-.
-├── css
-│   └── style.css
-├── index.html
-├── js
-│   ├── libs
-│   │   ├── jquery.min.js
-│   │   ├── qunit
-│   │   │   ├── qunit.css
-│   │   │   ├── qunit.js
-│   │   │   └── theme
-│   │   │       ├── qunit-theme-burce.css
-│   │   │       ├── qunit-theme-gabe.css
-│   │   │       ├── qunit-theme-ninja.css
-│   │   │       └── qunit-theme-nv.css
-│   │   └── require.js
-│   ├── main.js
-│   └── plugins
-│       ├── yamoo9.jquery.expr.js # 플러그인
-│       └── yamoo9.jquery.util.js # 플러그인
-└── test
-    ├── test.css
-    ├── test.html
-    ├── test.js
-    ├── yamoo9.jquery.expr.test.js # 플러그인 테스트
-    └── yamoo9.jquery.util.test.js # 플러그인 테스트
-```
+**플러그인이 적용된 jQuery() 인스턴스 객체**가 참조하고 있는 **DOM 객체**에<br>
+`data-linktext` 및 `role`, `rel` 속성을 동적으로 할당.
 
--
-
-### jQuery 유틸리티 메소드 확장
+![jQuery.fn.dataLink](GUIDE/jq-datalink.gif)
 
 ```js
+/*! jquery.generate-dataLink-0.1.0.js © yamoo9.net, 2015 */
 define([
-  'jquery'
-],
-function($) {
-  'use strict';
-
-  /**
-   * jQuery 표준
-   * $.fn.jquery, $().jquery
-   * ----------------------------
-   * 사용자 정의
-   * $.version
-   */
-  if (!$.version) {
-    $.version = $().jquery;
-  }
-
-  /**
-   * jQuery 표준
-   * $.expr[':']
-   * ----------------------------
-   * 사용자 정의
-   * $.ex
-   */
-  if (!$.ex) {
-    $.ex = $.expr[':'];
-  }
-
-  /**
-   * Console 표준
-   * console.log()
-   * ----------------------------
-   * 사용자 정의
-   * $.log()
-   */
-  if (!$.log) {
-    $.log = function(arg) {
-      if (window.console) {
-        console.log(arg);
-      }
-    };
-  }
-
-  /**
-   * jQuery 표준
-   * $(this) x α
-   * ----------------------------
-   * 사용자 정의
-   * $.$(this)
-   */
-  if ( !$.$ ) {
-    $.$ = function(el) {
-      // if ( !$.data(el, '@this') ) {
-      //  $.data(el, '@this', $(el));
-      // }
-
-      // return $.data(el, '@this');
-      //
-      return $.data(el, '@this') || $.data(el, '@this', $(el));
-    }
-  }
-
-  /**
-   * jQuery 표준
-   * $(el), $(el).index(), meta[3]
-   * ----------------------------
-   * 사용자 정의
-   * config.el, config.index, config.meta
-   */
-  $.$config = function(el, meta) {
-    return {
-      el    : $.$(el),
-      index : this.el.index(),
-      meta  : (meta ? meta[3] : null)
-    };
-  };
-
-});
-```
-
--
-
-### jQuery.expr[':'] 확장
-
-```js
-define([
-  'jquery',
-  'yamoo9.jquery.util'
-],
-function($) {
-  'use strict';
-
-  /**
-   * 참고 URL
-   * https://coderwall.com/p/gdt7ga/custom-jquery-selectors-using-expressions
-   * http://malsup.com/jquery/expr/
-   */
-
-  /**
-   * jQuery 표준
-   * $('span[class*="icon-"]');
-   * ----------------------------
-   * 사용자 정의
-   * $('span:icon');
-   */
-  $.expr[':'].icon = function(el, index, meta) {
-    return el.className.toLowerCase().match('icon-');
-  };
-
-  /**
-   * jQuery 표준
-   * $('span[class*="icon-"][class*="-mega"]');
-   * ----------------------------
-   * 사용자 정의
-   * $("span:icon(mega)");
-   */
-  $.expr[':'].icon = function(el, index, meta) {
-    var _meta = meta[3],
-      cn = el.className.toLowerCase();
-    return _meta ? ( cn.match('icon-') && cn.match(_meta) ) : cn.match('icon-');
-  };
-
-  /**
-   * 사용자 정의 디버깅
-   * $('span:first:debug');
-   */
-  $.expr[':'].debug = function(el, index, meta) {
-    console.log('--- DEBUG ---', '\nel: ', el, '\nindex: ', index, '\nmeta: ', meta[3], '\n--- // DEBUG ---');
-    // console.log('--- DEBUG ---');
-    // console.log('el: ', el);
-    // console.log('index: ', index);
-    // console.log('meta: ', meta[3]);
-    // console.log('--- // DEBUG ---');
-  };
-
-  /**
-   * jQuery 표준
-   * $('span:nth-child(3n)');
-   * ----------------------------
-   * 사용자 정의
-   * $('span:nth(3)');
-   */
-  $.expr[':'].nth = function(el, index, meta) {
-    var config = $.$config(el, meta);
-    if(!config.meta) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
-    return (config.index + 1) % config.meta === 0;
-  };
-
-  /**
-   * jQuery 표준
-   * $('span').each(function(index, el) { return $(this).css('display') === 'block' });
-   * -----------------------------------------------------------------------------------
-   * 사용자 정의
-   * $('span:block');
-   */
-  var filter = 'inline, inline-block, block, list-item'.split(', '),
-    k      = 0,
-    l      = filter.length;
-
-  for(; k<l; k++) {
-    (function(display_value){
-      $.expr[':'][display_value] = function(el, index, meta) {
-        var config = $.$config(el, meta);
-        return config.el.css('display') === display_value;
-      }
-    })(filter[k]);
-  }
-
-  /**
-   * jQuery 표준
-   * $("a.btn.new-repo").data("button", "new-repo");
-   * ----------------------------
-   * 사용자 정의
-   * $("a:button(new-repo)");
-   */
-  $.expr[':'].btn = function(el, index, meta) {
-    var config = $.$config(el, meta);
-    return config.el.hasClass('btn') && config.el.data('btn', config.meta);
-  };
-
-});
-```
-
--
-
-### QUnit 비동기 실행
-```js
-<<<<<<< HEAD
-(function(global, Q, $){
-	'use strict';
-
-	var class_name = 'clicked';
-
-	// QUnit 모듈 정의
-	Q.module('jquery.radioClass', {
-		beforeEach: function() {
-			var self = this;
-			self.name = class_name;
-			self.$demo = $('#demo');
-			self.$demo.on('click', 'li > a', function(e) {
-				e.preventDefault();
-				$(this).radioClass( self.name, 'li' );
-			});
-		}
-	});
-
-	Q.test('jQuery v1.x 버전을 사용하는가?', 2, function(A) {
-		// A.expect(2);
-		A.strictEqual($, window.jQuery, 'jQuery 사용 준비 완료!');
-		A.ok($.fn.jquery[0] === '1', 'jQuery 1.x 버전대 사용!');
-	});
-
-	Q.test('$.fn은 jQuery.prototype인가?', function(A){
-		A.strictEqual($.fn, jQuery.prototype, '$.fn은 jQuery.prototype이 맞습니다.');
-	});
-
-	Q.test('$.fn.radioClass가 존재하는가?', function(A){
-		A.ok($.fn.radioClass, '존재합니다.');
-	});
-
-	Q.test('#demo li:first-child > a 요소의 부모 요소에 "'+ class_name +'" class 속성이 추가되었는가?', function(A) {
-		var _demo = this.$demo,
-			_demo__a = _demo.find('li:first-child > a').trigger('click');
-		A.ok(_demo__a.parent().hasClass(this.name));
-	});
-
-})(window, window.QUnit, window.jQuery);
-=======
-require([
-  'jquery.radioClass.test'
+	// 의존 모듈
 ],
 function() {
+	'use strict';
 
-  /**
-   * ------------------------------------
-   * QUnit 비동기 실행
-   * http://api.qunitjs.com/QUnit.start/
-   * http://api.qunitjs.com/QUnit.config/
-   * ------------------------------------
-   */
+	// console.log('사용 중인 jQuery 버전은?\n', $().jquery);
 
-  // QUnit.config.autostart = false;
-  QUnit.start();
+	/**
+	 * --------------------------------
+	 * jQuery 플러그인 디자인 패턴
+	 * 이름 정의
+	 * 플러그인 유무 확인
+	 * 플러그인 작성
+	 * 플러그인 내부 this 참조 확인
+	 * 플러그인 체이닝 설정
+	 * --------------------------------
+	 */
 
+	// 플러그인 존재 유무 확인
+	if ( !$.fn.dataLink ) {
+
+		/**
+		 * 플러그인 기본 옵션
+		 * 외부에서 접근 불가능 (영역 내 지역변수)
+		 */
+		// var _default = '[class*="slide-btn-"]';
+
+
+		// 플러그인 정의
+		$.fn.dataLink = function(filterExp) {
+
+			// $() 인스턴스 객체 self 변수에 filtering 하여 참조
+			var self = this.filter( filterExp || $.fn.dataLink.default );
+
+			// $() 인스턴스 집합에 개별적 플러그인 적용을 위한 $.each() 코드
+			return $.each(self, function(index, item) {
+
+					// 집합 내 개별 $() 인스턴스 객체 참조
+				var $item      = self.eq(index),
+
+					// href 속성 참조
+					link_path  = $item.attr('href'),
+
+					// 외부 링크 속성 여부 확인
+					// RegExp를 활용한 방법: link_path.match(/^http:\/\//)
+					isExternal = link_path.indexOf('http://') > -1,
+
+					// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
+					linkFix    = isExternal && link_path.replace('http://', '');
+
+
+				// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
+				// if ( isExternal ) {
+				// 	$item.attr('rel', 'external');
+				// }
+				isExternal && $item.attr('rel', 'external');
+
+				// $item 인스턴스 객체에 .attr() 설정
+				$item.attr({
+					'role'          : 'button', // WAI-ARIA 1.0 역할 "버튼" 정의
+					'data-linktext' : linkFix,  // data-linktext 설정
+				});
+
+			});
+
+		};
+
+		/**
+		 * 플러그인 기본 옵션
+		 * 외부에서 접근가능하게 설정
+		 */
+		$.fn.dataLink.default = '[class*="slide-btn-"]';
+
+	}
 });
->>>>>>> DAY08
 ```
 
--
+### 플러그인 - style.css
+```css
+@import url(http://fonts.googleapis.com/css?family=Exo+2:100);
 
-### jQuery 유틸리티 메소드
-유틸리티 메소드는 정적 메소드(Static Method)로 jQuery 함수의 속성을 말합니다.
-
-```js
-// jQuery Utility Methods 예시
-jQuery.each();
-$.ajax();
-$.proxy();
-.
-.
-.
-```
-
--
-
-#### 데이터 유형 체크 jQuery 유틸리티 메소드(함수)
-
-```js
-$.isNumeric(number);
-$.isFunction(function);
-$.isArray(array);
-$.isEmptyObject(object);
-$.isPlainObject(object);
-$.isXmlDoc(doc);
-$.type(object); // ★★★★★
-```
-
-##### `$.type` 함수가 반환하는 데이터 유형
-- `number` - 숫자
-- `string` - 문자
-- `boolean` - 논리
-- `function` - 함수
-- `array` - 배열
-- `object` - 객체
-- `date` - 날짜
-- `regexp` - 정규표현식
-- `undefined`
-- `null`
-
--
-
-[DEMO v1](http://jsbin.com/vubefujowu/2/edit?js,output)
-
-```js
-var callToAction, callbackFn;
-
-callToAction = function (count, delay, fn) {
-  var i = 0;
-
-  (function loopIt(){
-    i++;
-    fn();
-    if (i < count) {
-      setTimeout(loopIt, delay);
-    }
-  }());
-};
-
-callbackFn = function () {
-  $('.out').append('<p>function called</p>');
-};
-
-callToAction(3, 400, callbackFn);
-```
-
-[DEMO v2](http://jsbin.com/zimuvunura/2/edit?js,output)
-
-```js
-var callToAction, callbackFn;
-
-callToAction = function () {
-  var args = arguments; // 함수 전달인자 유사배열
-  var count = $.isNumeric(args[0]) ? args[0]: 3;
-  var delay = $.isNumeric(args[1]) ? args[1]: 400;
-  var fn = $.isFunction(args[0]) ?
-              args[0] :
-              $.isFunction(args[1]) ?
-                args[1] :
-                args[2];
-
-  var i = 0;
-
-  (function loopIt(){
-    i++;
-    fn();
-    if (i < count) {
-      setTimeout(loopIt, delay);
-    }
-  }());
-};
-
-callbackFn = function () {
-  $('.out').append('<p>함수 호출됨.</p>');
-};
-
-callToAction(6, 200, callbackFn);
-```
-
--
-
-#### 콜렉션 조작(Collection Manipulation) 유틸리티 메소드
-- makeArray
-- inArray
-	- return 1 또는 index
-	- 전달인자(옵션)
-- unique
-- merge
-- map
-	- $().map()
-	- $.map()
-- grep
-	- 전달인자 반전
-	- return 배열
-
-[데모](http://jsbin.com/qatomelozo/1/edit?js,console)
-
-```js
-/**
- * makeArray : 배열로 만듬
- * inArray : 배열 내부에 아이템이 존재할 경우, 인덱스 반환
- * $.inArray(item, array);
- * unique : 중복되는 배열 원소를 하나만 남겨둠
- * $.unique(array);
- * merge : 배열을 병합
- * $.merge(array1, array2);
- * map : 배열 원소를 순환하여 처리한 결과를 각 원소에 반영 후 반환
- * $.map(array, function(item, idx){});
- * grep : 특정 원소를 조건에 따라 솎아냄
- * $.grep(array, function(item, idx){})
- */
-
-var arr1 = [2015, 6, 23, 6, 2015];
-var arr2 = [2, 5, 8, 12, 11];
-
-console.log($.isArray(arr1)); // true
-
-console.log($.inArray(2015, arr1)); // 1
-
-if ( $.inArray(2015, arr1) !== -1 ) {
-  console.log('2015는 arr1 배열 내부 원소입니다.');
+html {
+	font-size: 16px;
 }
 
-if ( $.inArray(9, arr2) !== -1 ) {
-  console.log('9는 arr2 배열 내부 원소입니다.');
-} else {
-  console.log('9는 arr2 배열 내부 원소가 아닙니다.');
+body {
+	height: 100vh;
+	margin: 0;
+	color: #fff;
+	background: #FC414B -webkit-linear-gradient(#fc414b, #931A25);
+	background: #FC414B linear-gradient(#fc414b, #931A25);
+	letter-spacing: -0.04em;
 }
 
-arr1 = $.unique(arr1);
+body * {
+	margin: 0;
+	font-family: "Exo 2", sans-serif;
+	font-weight: 100;
+}
 
-console.log(arr1); // [2015, 6, 23]
+a {
+	color: inherit;
+	line-height: 1.5;
+}
 
-var newArr = $.merge(arr1, arr2);
+h1 {
+	margin-bottom: 24px;
+	margin-bottom: 1.5rem;
+}
 
-console.log(newArr); // [2015, 6, 23, 2, 5, 8, 12, 11]
+p {
+	margin-bottom: 1rem;
+	color: #FACED2;
+}
 
-arr2 = $.map(arr2, function(item, idx) {
-  return parseInt( (item * item) / (idx===0 ? 2 : idx), 10 );
-});
+.container {
+	max-width: 640px;
+	max-width: 40rem; /* rool Element base EM */
+	margin: 0 auto;
+	padding-top: 100px;
+	padding-top: 6.25rem;
+}
 
-console.log(arr2); // [2, 25, 32, 48, 30]
+/* 슬라이드 버튼 기본 스타일 모듈 */
+a[class*="slide-btn-"] {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	border-bottom: 2px solid #EF747E;
+	padding-right: 0.3em;
+	padding-left: 0.3em;
+	color: #fff;
+	vertical-align: bottom;
+	text-decoration: none;
+}
 
-newArr = $.grep(newArr, function(item){
-   return item % 3 === 0;
-});
+a[class*="slide-btn-"]:hover,
+a[class*="slide-btn-"]:focus {
+	border-bottom-color: #34c0ff;
+}
 
-console.log(newArr); // [6, 12]
+a[class*="slide-btn-"]::before {
+	content: attr(data-linktext);
+	position: absolute;
+	color: #fff;
+	background: #34C0FF;
+	text-align: center;
+	-webkit-transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
 
-$(function() {
-  var mArr = $.makeArray( $('li') );
-  console.log(mArr.length); // 7
-});
+/* 방향 스타일 초기화 모듈 */
+a[class*="slide-btn-"]:hover::before,
+a[class*="slide-btn-"]:focus::before {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
 
+a[class*="slide-btn-"]:focus {
+	outline: none;
+}
+
+/* 방향 스타일 모듈 */
+a[class*="-left"]::before {
+	right: 100%;
+	left: -100%;
+}
+
+a[class*="-right"]::before {
+	right: -100%;
+	left: 100%;
+}
+
+a[class*="-top"]::before {
+	top: -100%;
+	bottom: 100%;
+}
+
+a[class*="-bottom"]::before {
+	top: 100%;
+	bottom: -100%;
+}
+```
+
+---
+
+### jQuery 사용자정의 확장
+
+- `$`           - jQuery 유틸리티 메소드 확장
+- `$.expr[':']` - jQuery 선택자 확장
+- `$.fn`        - jQuery 플러그인 확장
+- `$.fx.speeds` - jQuery 애니메이션 속도 확장
+- jQuery 메소드 오버라이딩
+
+-
+
+##### jQuery 유틸리티 메소드 확장
+```js
+$.log = (function(){
+	if( console ) {
+		return function() {
+			console.log.apply(console, arguments);
+		};
+	}
+}());
+$.group = (function(){
+	if( console && console.group ) {
+		return function(name) {
+			console.group(name);
+		};
+	}
+})();
+$.groupEnd = (function(){
+	if( console && console.groupEnd ) {
+		return function() {
+			console.groupEnd();
+		};
+	}
+})();
 ```
 
 -
 
-### 온라인 Markdown 에디터
-[Stackedit Editor](https://stackedit.io/)
+##### jQuery 애니메이션 속도 확장
+```js
+$.log($.fx.speeds); // {_default: 400, slow: 600, fast: 200}
+$.fx.speeds['very-fast'] = 100;
+$.fx.speeds['very-slow'] = 800;
+$.fx.speeds['1s'] = 1000;
+```
+
+-
+
+##### jQuery 메소드 오버라이딩
+```js
+$.merge = (function(){
+
+	$.origin       = $.origin || {};
+	$.origin.merge = $.merge;
+
+	return function() {
+		var args = arguments,
+			l    = args.length,
+			i    = 1;
+
+		for (; i<l; i++) {
+			if (args[i]) {
+				$.origin.merge(args[0], args[i]);
+			}
+		}
+
+		return args[0];
+	};
+}());
+```
+
+-
+
+##### jQuery 플러그인 디자인 패턴
+- 플러그인 이름
+- 플러그인 제작 기본 패턴
+	- `(function(){})();`을 활용한 `$` 별칭 보호
+	- 체이닝 설정
+- 사용자 정의 옵션 설정
+- 네임스페이스
+
+-
+
+###### 플러그인 이름 작성
+`jquery.{{플러그인이름}}.js` 또는 `jquery.{{플러그인이름}}.1.0.0.js`
+
+-
+
+###### 플러그인 제작 기본 패턴
+```js
+(function(global, document, $){
+	'use strict';
+	$.fn[{{플러그인이름}}] = function() {
+		var _this = this;
+		return _this;
+		// return _this.each(function(index, item){});
+		// return _this.pushStack(element);
+	};
+})(window, document, window.jQuery);
+```
+
+-
+
+###### 플러그인 사용자 정의 옵션 설정
+```js
+(function(global, document, $){
+	'use strict';
+
+	var settings = {};
+	var defaults = {};
+
+	$.fn[{{플러그인이름}}] = function(options) {
+		var _this = this;
+
+		// $.extend()를 활용한 객체 병합
+		$.extend(settings, defaults, options);
+
+		return _this;
+	};
+})(window, document, window.jQuery);
+```
+
+```js
+(function(global, document, $){
+	'use strict';
+
+	var settings = {};
+
+	$.fn[{{플러그인이름}}] = function(options) {
+		var _this = this;
+
+		// $.extend()를 활용한 객체 병합
+		$.extend(settings, this[{{플러그인이름}}].defaults, options);
+
+		return _this;
+	};
+
+	// 외부에서 $.fn[{{플러그인이름}}].defaults 기본 값 변경 가능
+	$.fn[{{플러그인이름}}].defaults = {};
+
+})(window, document, window.jQuery);
+```
