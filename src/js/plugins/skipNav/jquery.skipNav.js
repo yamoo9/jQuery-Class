@@ -35,8 +35,25 @@ define([
 				.on('click', 'a', function(e) {
 					// 브라우저 기본 동작 차단
 					e.preventDefault();
-					var path = $.$(this).attr('href');
-					console.log(path);
+					// 스킵 내비게이션 링크 아이템의 href 속성 참조
+					// var path = $.$(this).attr('href');
+					var path = e.target.getAttribute('href');
+
+					// console.log($( path ));
+
+					// 목적지 ID === path
+					var $target = $(path);
+
+					// 목적지 요소에 접근성을 부여하기 위해
+					// tabindex=0 속성을 정의합니다.
+					$target
+						.attr('tabindex', 0)
+						.focus()
+						.on('blur', function() {
+							$target.attr('tabindex', -1);
+						});
+
+					// window.location.hash = path;
 				})
 
 

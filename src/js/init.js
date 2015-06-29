@@ -1,4 +1,4 @@
-define('init', [
+define([
 	'jquery.skipNav'
 ],
 function() {
