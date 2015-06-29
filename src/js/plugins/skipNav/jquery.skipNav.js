@@ -1,6 +1,16 @@
 define(['jquery'], function() {
 	'use strict';
 
+	/**
+	 * $().skipNav()의 역할 정의
+	 * 스킵 내비게이션을 적용
+	 * 문서 내 <body> 바로 밑에 적용
+	 * 문서에서 한 번만 사용
+	 * 내부의 링크 아이템은 3~4개 정도 선으로 봅니다.
+	 * URL 뒤에 붙는 hash를 붙이지 않아야 합니다. - 웹 브라우저의 기본 동작을 차단
+	 * 뒤로가기 버튼을 적용했을 때, 메모리
+	 */
+
 	// 플러그인 이름 설정
 	var plugin = 'skipNav';
 
@@ -26,7 +36,6 @@ define(['jquery'], function() {
 
 			});
 		}
-
 
 		// 플러그인 기본 옵션 설정
 		$.fn[plugin].defaults = {
