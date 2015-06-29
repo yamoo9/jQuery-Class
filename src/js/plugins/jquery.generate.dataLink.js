@@ -27,9 +27,17 @@ function() {
 		 */
 		// var _default = '[href]';
 
+		// 기본 옵션     : defaluts
+		// 사용자 정의 옵션 : options
+		// 병합된 옵션    : settings
 
 		// 플러그인 정의
-		$.fn.dataLink = function(filterExp, cName) {
+		$.fn.dataLink = function(options) {
+
+			console.log('$.fn.dataLink.defaults\n', $.fn.dataLink.defaults);
+			console.log('options\n', options);
+
+			return;
 
 			// $() 인스턴스 객체 self 변수에 filtering 하여 참조
 			var self = this.filter( filterExp || $.fn.dataLink.default );
@@ -50,7 +58,7 @@ function() {
 					// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
 					linkFix    = isExternal && link_path.replace('http://', '');
 
-				$item.addClass(cName);
+				$item.addClass(cNamePrefix + cName);
 
 				// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
 				// if ( isExternal ) {
@@ -76,8 +84,9 @@ function() {
 		// $.fn.dataLink.className = 'slide-shape-top';
 
 		$.fn.dataLink.defaults = {
-			filterExp : '[href]',
-			cName     : 'slide-shape-top'
+			filterExp   : '[href]',
+			cNamePrefix : 'slide-',
+			cName       : 'shape-top'
 		};
 
 
