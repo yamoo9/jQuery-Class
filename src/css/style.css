@@ -42,110 +42,13 @@ p {
 	padding-top: 6.25rem;
 }
 
-/* 슬라이드 버튼 기본 스타일 모듈 */
-a[class*="slide-shape-"] {
-	display: inline-block;
-	overflow: hidden;
-	position: relative;
-	border-bottom: 2px solid #EF747E;
-	padding-right: 0.3em;
-	padding-left: 0.3em;
-	color: #fff;
-	vertical-align: bottom;
-	text-decoration: none;
+
+[id*='art-'] {
+	margin-bottom: 32px;
+	margin-bottom: 2rem;
 }
 
-a[class*="slide-shape-"]:hover,
-a[class*="slide-shape-"]:focus {
-	border-bottom-color: #34c0ff;
-}
-
-a[class*="slide-shape-"]::before {
-	content: attr(data-linktext);
-	position: absolute;
-	color: #fff;
-	background: #34C0FF;
-	text-align: center;
-	-webkit-transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
-	transition: all 340ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
-}
-
-/* 방향 스타일 초기화 모듈 */
-a[class*="slide-shape-"]:hover::before,
-a[class*="slide-shape-"]:focus::before {
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-}
-
-a[class*="slide-shape-"]:focus {
-	outline: none;
-}
-
-/* 방향 스타일 모듈 */
-a.slide-shape-left::before {
-	right: 100%;
-	left: -100%;
-}
-
-a.slide-shape-right::before {
-	right: -100%;
-	left: 100%;
-}
-
-a.slide-shape-top::before {
-	top: -100%;
-	bottom: 100%;
-}
-
-a.slide-shape-bottom::before {
-	top: 100%;
-	bottom: -100%;
-}
-
-
-
-/* 슬라이드 언더라인 기본 스타일 모듈 */
-a[class*="slide-underline-"] {
-	position: relative;
-	padding-right: 0.3em;
-	padding-left: 0.3em;
-	padding-bottom: 0.1em;
-	color: #fff;
-	text-decoration: none;
-}
-
-a[class*="slide-underline-"]::before {
-	content: '';
-	position: absolute;
-	top: 100%;
-	border-bottom: 2px solid #fff;
-	transition: all 0.2s;
-}
-
-/* 슬라이드 언더라인 방향 스타일 모듈 */
-a.slide-underline-left::before {
-	left: 0;
-	right: 100%;
-}
-a.slide-underline-left:hover::before {
-	right: 0;
-}
-
-a.slide-underline-right::before {
-	left: 100%;
-	right: 0;
-}
-a.slide-underline-right:hover::before {
-	left: 0;
-}
-
-a.slide-underline-center::before {
-	right: 50%;
-	left: 50%;
-}
-a.slide-underline-center:hover::before {
-	right: 0;
-	left: 0;
+[id*='art-'] h2 {
+	margin-bottom: 16px;
+	margin-bottom: 1rem;
 }
