@@ -1,4 +1,6 @@
-define(['jquery'], function() {
+define([
+	'jquery.utils',
+], function() {
 	'use strict';
 
 	/**
@@ -26,7 +28,17 @@ define(['jquery'], function() {
 			// 플러그인이 적용된 $() 인스턴스 집합
 			var $this = this;
 
-			console.log($this.text());
+			// 식별자 class, data- 접두사 속성 추가
+			$this
+				.addClass('skip-nav')
+				// 이벤트 위임
+				.on('click', 'a', function(e) {
+					// 브라우저 기본 동작 차단
+					e.preventDefault();
+					var path = $.$(this).attr('href');
+					console.log(path);
+				})
+
 
 			// 플러그인 적용 대상이 하나일 때, 체이닝 설정
 			return $this;
