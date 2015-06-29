@@ -25,7 +25,7 @@ function() {
 		 * 플러그인 기본 옵션
 		 * 외부에서 접근 불가능 (영역 내 지역변수)
 		 */
-		// var _default = '[href][class*="slide-btn-"]';
+		// var _default = '[href]';
 
 
 		// 플러그인 정의
@@ -71,7 +71,7 @@ function() {
 		 * 플러그인 기본 옵션
 		 * 외부에서 접근가능하게 설정
 		 */
-		$.fn.dataLink.default = '[href][class*="slide-btn-"]';
+		$.fn.dataLink.default = '[href]';
 
 	}
 });

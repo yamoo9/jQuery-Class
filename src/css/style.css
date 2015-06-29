@@ -5,7 +5,7 @@ html {
 }
 
 body {
-	height: 100vh;
+	min-height: 100vh;
 	margin: 0;
 	color: #fff;
 	background: #FC414B -webkit-linear-gradient(#fc414b, #931A25);
@@ -43,7 +43,7 @@ p {
 }
 
 /* 슬라이드 버튼 기본 스타일 모듈 */
-a[class*="slide-btn-"] {
+a[class*="slide-shape-"] {
 	display: inline-block;
 	overflow: hidden;
 	position: relative;
@@ -55,12 +55,12 @@ a[class*="slide-btn-"] {
 	text-decoration: none;
 }
 
-a[class*="slide-btn-"]:hover,
-a[class*="slide-btn-"]:focus {
+a[class*="slide-shape-"]:hover,
+a[class*="slide-shape-"]:focus {
 	border-bottom-color: #34c0ff;
 }
 
-a[class*="slide-btn-"]::before {
+a[class*="slide-shape-"]::before {
 	content: attr(data-linktext);
 	position: absolute;
 	color: #fff;
@@ -71,35 +71,81 @@ a[class*="slide-btn-"]::before {
 }
 
 /* 방향 스타일 초기화 모듈 */
-a[class*="slide-btn-"]:hover::before,
-a[class*="slide-btn-"]:focus::before {
+a[class*="slide-shape-"]:hover::before,
+a[class*="slide-shape-"]:focus::before {
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
 }
 
-a[class*="slide-btn-"]:focus {
+a[class*="slide-shape-"]:focus {
 	outline: none;
 }
 
 /* 방향 스타일 모듈 */
-a[class*="-left"]::before {
+a.slide-shape-left::before {
 	right: 100%;
 	left: -100%;
 }
 
-a[class*="-right"]::before {
+a.slide-shape-right::before {
 	right: -100%;
 	left: 100%;
 }
 
-a[class*="-top"]::before {
+a.slide-shape-top::before {
 	top: -100%;
 	bottom: 100%;
 }
 
-a[class*="-bottom"]::before {
+a.slide-shape-bottom::before {
 	top: 100%;
 	bottom: -100%;
+}
+
+
+
+/* 슬라이드 언더라인 기본 스타일 모듈 */
+a[class*="slide-underline-"] {
+	position: relative;
+	padding-right: 0.3em;
+	padding-left: 0.3em;
+	padding-bottom: 0.1em;
+	color: #fff;
+	text-decoration: none;
+}
+
+a[class*="slide-underline-"]::before {
+	content: '';
+	position: absolute;
+	top: 100%;
+	border-bottom: 2px solid #fff;
+	transition: all 0.2s;
+}
+
+/* 슬라이드 언더라인 방향 스타일 모듈 */
+a.slide-underline-left::before {
+	left: 0;
+	right: 100%;
+}
+a.slide-underline-left:hover::before {
+	right: 0;
+}
+
+a.slide-underline-right::before {
+	left: 100%;
+	right: 0;
+}
+a.slide-underline-right:hover::before {
+	left: 0;
+}
+
+a.slide-underline-center::before {
+	right: 50%;
+	left: 50%;
+}
+a.slide-underline-center:hover::before {
+	right: 0;
+	left: 0;
 }
