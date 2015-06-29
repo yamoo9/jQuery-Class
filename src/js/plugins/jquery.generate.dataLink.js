@@ -29,7 +29,7 @@ function() {
 
 
 		// 플러그인 정의
-		$.fn.dataLink = function(filterExp) {
+		$.fn.dataLink = function(filterExp, cName) {
 
 			// $() 인스턴스 객체 self 변수에 filtering 하여 참조
 			var self = this.filter( filterExp || $.fn.dataLink.default );
@@ -50,6 +50,7 @@ function() {
 					// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
 					linkFix    = isExternal && link_path.replace('http://', '');
 
+				$item.addClass(cName);
 
 				// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
 				// if ( isExternal ) {
@@ -71,7 +72,14 @@ function() {
 		 * 플러그인 기본 옵션
 		 * 외부에서 접근가능하게 설정
 		 */
-		$.fn.dataLink.default = '[href]';
+		// $.fn.dataLink.filterExp = '[href]';
+		// $.fn.dataLink.className = 'slide-shape-top';
+
+		$.fn.dataLink.defaults = {
+			filterExp : '[href]',
+			cName     : 'slide-shape-top'
+		};
+
 
 	}
 });
