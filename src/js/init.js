@@ -18,7 +18,10 @@ function() {
 
 		// 플러그인 적용
 		// 사용자 정의 옵션 전달
-		.dataLink(options)
+		.dataLink({
+			cName: 'underline-right',
+			button: true
+		})
 
 		// [체이닝 테스트] 클릭 이벤트 적용
 		// .on('click', function(e) {

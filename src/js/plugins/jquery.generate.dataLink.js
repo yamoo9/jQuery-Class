@@ -32,15 +32,20 @@ function() {
 		// 병합된 옵션    : settings
 
 		// 플러그인 정의
-		$.fn.dataLink = function(options) {
+		$.fn.dataLink = function(options, callback) {
 
-			console.log('$.fn.dataLink.defaults\n', $.fn.dataLink.defaults);
-			console.log('options\n', options);
+			// 기본 옵션과	사용자 설정한 옵션을 콘솔을 통해 확인
+			// console.log('$.fn.dataLink.defaults\n', $.fn.dataLink.defaults);
+			// console.log('options\n', options);
 
-			return;
+			// 2개의 옵션을 합칩니다. 병합
+			// 객체 + 객체 [비교][속성이 다른것이 있으면 합치고][같은 속성이면 나중에 전달된 객체의 속성이 우선]
+			var settings = $.extend({}, $.fn.dataLink.defaults, options);
+
+			// console.log('settings\n', settings);
 
 			// $() 인스턴스 객체 self 변수에 filtering 하여 참조
-			var self = this.filter( filterExp || $.fn.dataLink.default );
+			var self = this.filter( settings.filterExp );
 
 			// $() 인스턴스 집합에 개별적 플러그인 적용을 위한 $.each() 코드
 			return $.each(self, function(index, item) {
@@ -49,7 +54,8 @@ function() {
 				var $item      = self.eq(index),
 
 					// href 속성 참조
-					link_path  = $item.attr('href'),
+					// link_path  = $item.attr('href'),
+					link_path  = item.getAttribute('href'),
 
 					// 외부 링크 속성 여부 확인
 					// RegExp를 활용한 방법: link_path.match(/^http:\/\//)
@@ -58,19 +64,21 @@ function() {
 					// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
 					linkFix    = isExternal && link_path.replace('http://', '');
 
-				$item.addClass(cNamePrefix + cName);
+				// 플러그인이 적용되는 개별 $()인스턴스 객체가 참조하는 DOM 객체에 class 속성 설정
+				$item.addClass(settings.cNamePrefix + settings.cName);
 
 				// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
 				// if ( isExternal ) {
 				// 	$item.attr('rel', 'external');
 				// }
 				isExternal && $item.attr('rel', 'external');
+				linkFix && $item.attr('data-linktext', linkFix);
+				settings.button && $item.attr('role', 'button');
 
-				// $item 인스턴스 객체에 .attr() 설정
-				$item.attr({
-					'role'          : 'button', // WAI-ARIA 1.0 역할 "버튼" 정의
-					'data-linktext' : linkFix,  // data-linktext 설정
-				});
+				// 플러그인 코드 종료 후에 실행되는 콜백함수
+				if ( callback && $.isFunction(callback) ) {
+					callback();
+				}
 
 			});
 
@@ -86,7 +94,8 @@ function() {
 		$.fn.dataLink.defaults = {
 			filterExp   : '[href]',
 			cNamePrefix : 'slide-',
-			cName       : 'shape-top'
+			cName       : 'shape-top',
+			button      : false
 		};
 
 
