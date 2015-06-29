@@ -4,8 +4,12 @@ define(['jquery'], function($) {
 	// $(this);
 	// $.$(this);
 	$.$ = function(el) {
-		if ( !$.data(el, 'this') ) { $.data(el, 'this', $(el)) }
-		return $.data(el, 'this');
+		// el 설정이 선택자(문자열)라면, el 변수에 Native 방식의 DOM 요소 참조
+		if ($.type(el) === 'string') {
+			el = document.querySelector(el);
+		}
+
+		return $.data(el, 'this') || $.data(el, 'this', $(el));
 	};
 
 	// $(this); $(this).index();

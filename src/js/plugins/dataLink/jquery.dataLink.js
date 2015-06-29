@@ -1,4 +1,4 @@
-/*! jquery.generate-dataLink-0.1.0.js © yamoo9.net, 2015 */
+/*! jquery.generate-dataLink-0.1.1.js © yamoo9.net, 2015 */
 define([
 	// 의존 모듈
 ],
@@ -38,7 +38,7 @@ function() {
 			// console.log('$.fn.dataLink.defaults\n', $.fn.dataLink.defaults);
 			// console.log('options\n', options);
 
-			// 2개의 옵션을 합칩니다. 병합
+			// 2개 이상 옵션(객체)을 합칩니다. [병합]
 			// 객체 + 객체 [비교][속성이 다른것이 있으면 합치고][같은 속성이면 나중에 전달된 객체의 속성이 우선]
 			var settings = $.extend({}, $.fn.dataLink.defaults, options);
 
