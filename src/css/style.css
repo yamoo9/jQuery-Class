@@ -41,3 +41,14 @@ p {
 	padding-top: 100px;
 	padding-top: 6.25rem;
 }
+
+
+[id*='art-'] {
+	margin-bottom: 32px;
+	margin-bottom: 2rem;
+}
+
+[id*='art-'] h2 {
+	margin-bottom: 16px;
+	margin-bottom: 1rem;
+}
