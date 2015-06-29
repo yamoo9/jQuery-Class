@@ -4,7 +4,8 @@ require.config({
 
 	paths: {
 		'jquery'          : 'libs/jquery.min',
-		'jquery.dataLink' : 'plugins/jquery.generate.dataLink'
+		'jquery.dataLink' : 'plugins/dataLink/jquery.dataLink',
+		'jquery.skipNav'  : 'plugins/skipNav/jquery.skipNav',
 	},
 
 	shim: {
