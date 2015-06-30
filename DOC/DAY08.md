@@ -133,6 +133,7 @@ function($) {
   /**
    * 참고 URL
    * https://coderwall.com/p/gdt7ga/custom-jquery-selectors-using-expressions
+   * http://www.webgeekly.com/tutorials/jquery/create-custom-jquery-selectors-to-speed-up-development/
    * http://malsup.com/jquery/expr/
    */
 
