@@ -1,25 +1,206 @@
 define(['jquery'], function($) {
 	'use strict';
 
-	// $(this);
-	// $.$(this);
-	$.$ = function(el) {
-		// el 설정이 선택자(문자열)라면, el 변수에 Native 방식의 DOM 요소 참조
-		if ($.type(el) === 'string') {
-			el = document.querySelector(el);
+	/**
+	 * --------------------------------
+	 * jQuery.fx.speeds 확장
+	 * --------------------------------
+	 */
+	$.extend($.fx.speeds, {
+		'very-fast' : 100,
+		// 'fast'      : 200,
+		// 'normal'    : 400,
+		// 'slow'      : 600,
+		'very-slow' : 800,
+		'1s'        : 1000
+	});
+
+	/**
+	 * --------------------------------
+	 * jQuery 유틸리티 메소드 확장
+	 * --------------------------------
+	 */
+	$.extend($, {
+
+		'version': $.fn.jquery,
+
+		'ex': $.expr[':'],
+
+		'selector': (function(){
+			if (document.querySelector) {
+				return function(selector) {
+					return document.querySelector(selector);
+				}
+			}
+		})(),
+
+		'selectorAll': (function(){
+			if (document.querySelectorAll) {
+				return function(selector) {
+					return document.querySelectorAll(selector);
+				}
+			}
+		})(),
+
+		'$': function(el) {
+			if (el.jquery) {el = el[0]; }
+			if (typeof el === 'string') {el = $.selector(el); }
+			if (!el || !el.nodeName) { throw new TypeError('타입오류: DOM객체 또는 $() 필요'); }
+			return $.data(el, 'this') || $.data(el, 'this', $(el));
+		},
+
+		'config': function(el, meta) {
+			return {
+				el    : $.$(el),
+				index : $.$(el).index(), // this.el.index()
+				meta  : $.expr.createPseudo ? meta : meta[3]
+			};
+		},
+
+		'$css': function(el, cssCode) {
+			if (el.jquery) {el = el[0]; }
+			if (!el.nodeName || typeof cssCode !== 'string') {
+				throw new TypeError('타입오류: 첫번째 인자 DOM객체 또는 $() 필요, 두번째 전달인자 문자 데이터 필요');
+			}
+			el.style.cssText += cssCode;
+			return $.$(el);
+		},
+
+		'activeElement': function() {
+			return document.activeElement;
+		},
+
+		'log': (function(){
+			if( console && console.log ) {
+				return function() {
+					console.log.apply(console, $.makeArray(arguments));
+				};
+			}
+		}()),
+
+		'group': (function(){
+			if( console && console.group ) {
+				return function(name) {
+					console.group(name);
+				};
+			}
+		})(),
+
+		'groupEnd': (function(){
+			if( console && console.groupEnd ) {
+				return function() {
+					console.groupEnd();
+				};
+			}
+		})(),
+
+		'time': (function(){
+			if( console && console.time ) {
+				return function(name) {
+					console.time(name);
+				};
+			}
+		})(),
+
+		'timeEnd': (function(){
+			if( console && console.timeEnd ) {
+				return function(name) {
+					console.timeEnd(name);
+				};
+			}
+		})(),
+
+	});
+
+	/**
+	 * --------------------------------
+	 * jQuery.expr[':'] 확장
+
+	 * The New Sizzle
+	 * http://blog.jquery.com/2012/07/04/the-new-sizzle/
+	 * https://github.com/jquery/sizzle/wiki#sizzleselectorspseudosname--function-elem--
+	 * https://github.com/jquery/sizzle/wiki#sizzleselectorscreatepseudofunction
+	 * --------------------------------
+	 */
+
+	$.extend($.ex, {
+
+		'icon': $.expr.createPseudo ?
+			$.expr.createPseudo(function(meta) {
+				return function(el) {
+					var cn = el.className.toLowerCase();
+					return meta ? (cn.match('icon-') && cn.match(meta) ) : cn.match('icon-');
+				}
+			}) :
+			function(el, index, meta) {
+				// return el.className.toLowerCase().match('icon-');
+				var _meta = meta[3],
+					cn = el.className.toLowerCase();
+				return _meta ? ( cn.match('icon-') && cn.match(_meta) ) : cn.match('icon-');
+			},
+
+		'debug': $.expr.createPseudo ?
+		$.expr.createPseudo(function(meta) {
+			return function(el) {
+				$.log(
+					'--- DEBUG ---',
+					'\nel: ', el,
+					'\nmeta: ', meta,
+					'\n--- // DEBUG ---'
+				);
+			};
+		}) :
+		function(el, index, meta) {
+			$.log(
+				'--- DEBUG ---',
+				'\nel: ', el,
+				'\nindex: ', index,
+				'\nmeta: ', meta[3],
+				'\n--- // DEBUG ---'
+			);
+		},
+
+		'nth-group': $.expr.createPseudo ?
+		$.expr.createPseudo(function(meta) {
+			return function(el) {
+				var config = $.config(el);
+				if(!meta || !$.isNumeric(meta)) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
+				return (config.index + 1) % meta === 0;
+			}
+		}) :
+		function(el, index, meta) {
+			var config = $.config(el, meta);
+			if(!config.meta) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
+			return (config.index + 1) % config.meta === 0;
+		},
+
+		'btn': $.expr.createPseudo ?
+		$.expr.createPseudo(function(meta) {
+			return function(el) {
+				return $.$(el).hasClass('btn') && config.el.data('btn', meta);
+			}
+		}) :
+		function(el, index, meta) {
+			var config = $.config(el, meta);
+			return config.el.hasClass('btn') && config.el.data('btn', config.meta);
 		}
 
-		return $.data(el, 'this') || $.data(el, 'this', $(el));
-	};
+	});
 
-	// $(this); $(this).index();
-	// c = $.$config(this); c.el; c.index;
-	$.$config = function(el, meta) {
-		return {
-			el : $.$(el),
-			index : this.el.index(),
-			meta : (meta ? meta[3] : null)
-		};
-	};
+	/**
+	 * jQuery.expr[':'] 확장 - display
+	 * --------------------------------
+	 */
+	var filter = 'inline, inline-block, block, list-item'.split(', '),
+		k      = 0,
+		l      = filter.length;
+
+	for(; k<l; k++) {
+		(function(display_value){
+			$.ex[display_value] = function(el) {
+				return $.$(el).css('display') === display_value;
+			}
+		})(filter[k]);
+	}
 
 });
