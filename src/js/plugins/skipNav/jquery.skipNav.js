@@ -31,6 +31,7 @@ define([
 			// 플러그인이 적용된 $() 인스턴스 집합
 			var $this = this;
 
+
 			$this
 				// 식별자 class 속성 추가
 				.addClass( settings.container )
@@ -64,18 +65,22 @@ define([
 						.on('blur', function() {
 							$target.attr('tabindex', -1);
 						});
-
 					// 뒤로가기 버튼을 적용했을 때, 메모리(URL 뒤에 붙는 hash) 설정
 					window.location.hash = path;
 
-					// callback 함수 전달 시, 플러그인 완료 후 callback 함수 실행
-					if ( callback && $.isFunction(callback) ) {
-						// callback() 함수 내부 this가 $target을 참조하도록 설정
-						// callback() 함수 내부에 전달되는 첫번째 인자 값을 settings로 설정
-						callback.call($target, settings);
-					}
-
 				});
+
+			// 플러그인이 적용된 내부의 a 요소는 화면에 감춰진 상태의 class 속성이 부여된다.
+			// 사용자가 감춰진 a 요소에 포커스를 활성화 시키면 화면에 보여진다.
+			$this.find('a').addClass('a11y-hidden focusable');
+
+
+			// callback 함수 전달 시, 플러그인 완료 후 callback 함수 실행
+			if ( callback && $.isFunction(callback) ) {
+				// callback() 함수 내부 this가 $target을 참조하도록 설정
+				// callback() 함수 내부에 전달되는 첫번째 인자 값을 settings로 설정
+				callback.call($this, settings);
+			}
 
 
 			// 플러그인 적용 대상이 하나일 때, 체이닝 설정
