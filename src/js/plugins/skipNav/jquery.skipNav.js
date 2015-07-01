@@ -26,7 +26,7 @@ define([
 		$.fn[plugin] = function(options, callback) {
 
 			// 플러그인 기본 + 사용자정의 옵션 병합
-			var settings = $.extend({}, $.fn[plugin].defaults, options);
+			var settings = $.extend(true,{}, $.fn[plugin].defaults, options);
 
 			// 플러그인이 적용된 $() 인스턴스 집합
 			var $this = this;
@@ -34,7 +34,7 @@ define([
 
 			$this
 				// 식별자 class 속성 추가
-				.addClass( settings.container )
+				.addClass( settings.containerClass )
 
 				// 이벤트 위임
 				// $this 내부 a 요소에게만 callback 함수 적용
@@ -72,7 +72,8 @@ define([
 
 			// 플러그인이 적용된 내부의 a 요소는 화면에 감춰진 상태의 class 속성이 부여된다.
 			// 사용자가 감춰진 a 요소에 포커스를 활성화 시키면 화면에 보여진다.
-			$this.find('a').addClass('a11y-hidden focusable');
+			$this.find('a')
+				.addClass(settings.linkClasses.hidden + ' ' + settings.linkClasses.focusable)
 
 
 			// callback 함수 전달 시, 플러그인 완료 후 callback 함수 실행
@@ -90,7 +91,11 @@ define([
 
 		// 플러그인 기본 옵션 설정
 		$.fn[plugin].defaults = {
-			'container': 'skipNav-container'
+			'containerClass': 'skipNav-container',
+			'linkClasses': {
+				'hidden': 'a11y-hidden',
+				'focusable': 'focusable'
+			}
 		};
 	}
 
