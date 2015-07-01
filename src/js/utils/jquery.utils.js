@@ -1,4 +1,7 @@
-define(['jquery'], function($) {
+define([
+	'jquery'
+],
+function($) {
 	'use strict';
 
 	/**
@@ -8,9 +11,9 @@ define(['jquery'], function($) {
 	 */
 	$.extend($.fx.speeds, {
 		'very-fast' : 100,
-		// 'fast'      : 200,
-		// 'normal'    : 400,
-		// 'slow'      : 600,
+		'fast'      : 200,
+		'normal'    : 400,
+		'slow'      : 600,
 		'very-slow' : 800,
 		'1s'        : 1000
 	});
@@ -183,15 +186,21 @@ define(['jquery'], function($) {
 		function(el, index, meta) {
 			var config = $.config(el, meta);
 			return config.el.hasClass('btn') && config.el.data('btn', config.meta);
+		},
+
+		'focusable' : function(el) {
+			el.focus();
+			return el === $.activeElement();
 		}
 
 	});
 
 	/**
 	 * jQuery.expr[':'] 확장 - display
+	 * http://www.w3schools.com/cssref/pr_class_display.asp
 	 * --------------------------------
 	 */
-	var filter = 'inline, inline-block, block, list-item'.split(', '),
+	var filter = 'inline, inline-block, block, list-item, table, inline-table, table-caption, table-row, table-cell, table-column, flex, inline-flex'.split(', '),
 		k      = 0,
 		l      = filter.length;
 
