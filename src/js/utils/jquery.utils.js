@@ -33,7 +33,7 @@ function($) {
 			if (document.querySelector) {
 				return function(selector) {
 					return document.querySelector(selector);
-				}
+				};
 			}
 		})(),
 
@@ -46,9 +46,11 @@ function($) {
 		})(),
 
 		'$': function(el) {
+			// 유효성검사 (Validation)
 			if (el.jquery) {el = el[0]; }
 			if (typeof el === 'string') {el = $.selector(el); }
 			if (!el || !el.nodeName) { throw new TypeError('타입오류: DOM객체 또는 $() 필요'); }
+			// 처리 코드
 			return $.data(el, 'this') || $.data(el, 'this', $(el));
 		},
 
@@ -118,6 +120,7 @@ function($) {
 	/**
 	 * --------------------------------
 	 * jQuery.expr[':'] 확장
+	 * jQuery.expr[':'] === jQuery.expr.pseudos
 
 	 * The New Sizzle
 	 * http://blog.jquery.com/2012/07/04/the-new-sizzle/
@@ -125,6 +128,9 @@ function($) {
 	 * https://github.com/jquery/sizzle/wiki#sizzleselectorscreatepseudofunction
 	 * --------------------------------
 	 */
+
+	// jQuery.expr === Sizzle.selectors
+	// jQuery.expr[':'] === Sizzle.selectors.pseudos
 
 	$.extend($.ex, {
 
