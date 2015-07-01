@@ -212,4 +212,53 @@ function($) {
 		})(filter[k]);
 	}
 
+
+	/**
+	 * --------------------------------
+	 * jQuery 유틸리티/인스턴스 메소드 오버라이딩
+	 * --------------------------------
+	 */
+
+	$.merge = (function(){
+
+		$.origin       = $.origin || {};
+		$.origin.merge = $.merge;
+
+		return function() {
+			var args = arguments,
+				l    = args.length,
+				i    = 1;
+
+			for (; i<l; i++) {
+				if (args[i]) {
+					$.origin.merge(args[0], args[i]);
+				}
+			}
+
+			return args[0];
+		};
+
+	}());
+
+
+
+	$.fn.css = (function(){
+
+		$.fn._css = $.fn.css;
+
+		return function() {
+			var arg = arguments[0];
+			if ( typeof arg === 'string' && arg.match(/:/) && !arguments[1] ) {
+				$.each(this, function(index, el) {
+					el.style.cssText = arg;
+				});
+			} else if ( typeof arg === 'string' && !arguments[1] ) {
+				return $.fn._css.call(this, arg);
+			} else {
+				$.fn._css.apply(this, arguments);
+			}
+		};
+
+	})();
+
 });
