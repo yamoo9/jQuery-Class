@@ -72,8 +72,7 @@ define([
 
 			// 플러그인이 적용된 내부의 a 요소는 화면에 감춰진 상태의 class 속성이 부여된다.
 			// 사용자가 감춰진 a 요소에 포커스를 활성화 시키면 화면에 보여진다.
-			$this.find('a')
-				.addClass(settings.linkClasses.hidden + ' ' + settings.linkClasses.focusable)
+			$this.find('a').addClass(settings.linkClasses.hidden + ' ' + settings.linkClasses.focusable);
 
 
 			// callback 함수 전달 시, 플러그인 완료 후 callback 함수 실행
@@ -83,11 +82,10 @@ define([
 				callback.call($this, settings);
 			}
 
-
 			// 플러그인 적용 대상이 하나일 때, 체이닝 설정
 			return $this;
 
-		}
+		};
 
 		// 플러그인 기본 옵션 설정
 		$.fn[plugin].defaults = {

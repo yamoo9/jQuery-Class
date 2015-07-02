@@ -221,50 +221,87 @@ function($) {
 
 	/**
 	 * --------------------------------
-	 * jQuery 유틸리티/인스턴스 메소드 오버라이딩
+	 * jQuery 유틸리티 메소드 오버라이딩
 	 * --------------------------------
 	 */
-
-	$.merge = (function(){
-
-		$.origin       = $.origin || {};
-		$.origin.merge = $.merge;
-
-		return function() {
-			var args = arguments,
-				l    = args.length,
-				i    = 1;
-
-			for (; i<l; i++) {
-				if (args[i]) {
-					$.origin.merge(args[0], args[i]);
+	$.extend($, {
+		/**
+		 * $.merge 오버라이딩
+		 * --------------------------------
+		 */
+		'merge' : (function(){
+			// $.merge 유틸리티 메소드 $.origin.merge에 백업
+			$.origin       = $.origin || {};
+			$.origin.merge = $.merge;
+			// $.merge 재정의
+			return function() {
+				var args = arguments,
+					l    = args.length,
+					i    = 1;
+				for (; i<l; i++) {
+					if (args[i]) {
+						$.origin.merge(args[0], args[i]);
+					}
 				}
-			}
+				return args[0];
+			};
+		}()),
 
-			return args[0];
-		};
-
-	}());
-
+	});
 
 
-	$.fn.css = (function(){
+	/**
+	 * --------------------------------
+	 * jQuery 인스턴스 메소드 오버라이딩
+	 * --------------------------------
+	 */
+	$.fn.extend({
+		/**
+		 * $.fn.css 오버라이딩
+		 * --------------------------------
+		 */
+		'css': (function(){
+			// $.fn.css 인스턴스 메소드 $.fn._css에 백업
+			$.fn._css = $.fn.css;
+			// $.fn.css 재정의
+			return function() {
+				var arg = arguments[0];
+				if ( typeof arg === 'string' && arg.match(/:/) && !arguments[1] ) {
+					$.each(this, function(index, el) {
+						el.style.cssText = arg;
+					});
+				} else if ( typeof arg === 'string' && !arguments[1] ) {
+					return $.fn._css.call(this, arg);
+				} else {
+					$.fn._css.apply(this, arguments);
+				}
+			};
+		})(),
 
-		$.fn._css = $.fn.css;
+		/**
+		 * $.fn.attr 오버라이딩
+		 * --------------------------------
+		 */
+		'attr': (function(){
+			// $.fn.attr 인스턴스 메소드 $.fn._attr에 백업
+			$.fn._attr = $.fn.attr;
+			// $.fn.attr 재정의
+			return function() {
+				var arg = arguments[0];
+				if ( $.type(arg) === 'object' ) {
+					$.each(this, function(index, el) {
+						$.each(arg, function(prop, value) {
+							el.setAttribute(prop, value);
+						});
+					});
+				} else if ( typeof arg === 'string' && !arguments[1] ) {
+					return $.fn._attr.call(this, arg);
+				} else {
+					$.fn._attr.apply(this, arguments);
+				}
+			};
+		})(),
 
-		return function() {
-			var arg = arguments[0];
-			if ( typeof arg === 'string' && arg.match(/:/) && !arguments[1] ) {
-				$.each(this, function(index, el) {
-					el.style.cssText = arg;
-				});
-			} else if ( typeof arg === 'string' && !arguments[1] ) {
-				return $.fn._css.call(this, arg);
-			} else {
-				$.fn._css.apply(this, arguments);
-			}
-		};
-
-	})();
+	});
 
 });
