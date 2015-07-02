@@ -1,4 +1,7 @@
-define(['jquery'], function($) {
+define([
+	'jquery'
+],
+function($) {
 	'use strict';
 
 	/**
@@ -8,9 +11,9 @@ define(['jquery'], function($) {
 	 */
 	$.extend($.fx.speeds, {
 		'very-fast' : 100,
-		// 'fast'      : 200,
-		// 'normal'    : 400,
-		// 'slow'      : 600,
+		'fast'      : 200,
+		'normal'    : 400,
+		'slow'      : 600,
 		'very-slow' : 800,
 		'1s'        : 1000
 	});
@@ -30,7 +33,7 @@ define(['jquery'], function($) {
 			if (document.querySelector) {
 				return function(selector) {
 					return document.querySelector(selector);
-				}
+				};
 			}
 		})(),
 
@@ -43,9 +46,11 @@ define(['jquery'], function($) {
 		})(),
 
 		'$': function(el) {
+			// 유효성검사 (Validation)
 			if (el.jquery) {el = el[0]; }
 			if (typeof el === 'string') {el = $.selector(el); }
 			if (!el || !el.nodeName) { throw new TypeError('타입오류: DOM객체 또는 $() 필요'); }
+			// 처리 코드
 			return $.data(el, 'this') || $.data(el, 'this', $(el));
 		},
 
@@ -115,6 +120,7 @@ define(['jquery'], function($) {
 	/**
 	 * --------------------------------
 	 * jQuery.expr[':'] 확장
+	 * jQuery.expr[':'] === jQuery.expr.pseudos
 
 	 * The New Sizzle
 	 * http://blog.jquery.com/2012/07/04/the-new-sizzle/
@@ -122,6 +128,9 @@ define(['jquery'], function($) {
 	 * https://github.com/jquery/sizzle/wiki#sizzleselectorscreatepseudofunction
 	 * --------------------------------
 	 */
+
+	// jQuery.expr === Sizzle.selectors
+	// jQuery.expr[':'] === Sizzle.selectors.pseudos
 
 	$.extend($.ex, {
 
@@ -183,15 +192,21 @@ define(['jquery'], function($) {
 		function(el, index, meta) {
 			var config = $.config(el, meta);
 			return config.el.hasClass('btn') && config.el.data('btn', config.meta);
+		},
+
+		'focusable' : function(el) {
+			el.focus();
+			return el === $.activeElement();
 		}
 
 	});
 
 	/**
 	 * jQuery.expr[':'] 확장 - display
+	 * http://www.w3schools.com/cssref/pr_class_display.asp
 	 * --------------------------------
 	 */
-	var filter = 'inline, inline-block, block, list-item'.split(', '),
+	var filter = 'inline, inline-block, block, list-item, table, inline-table, table-caption, table-row, table-cell, table-column, flex, inline-flex'.split(', '),
 		k      = 0,
 		l      = filter.length;
 
@@ -202,5 +217,91 @@ define(['jquery'], function($) {
 			}
 		})(filter[k]);
 	}
+
+
+	/**
+	 * --------------------------------
+	 * jQuery 유틸리티 메소드 오버라이딩
+	 * --------------------------------
+	 */
+	$.extend($, {
+		/**
+		 * $.merge 오버라이딩
+		 * --------------------------------
+		 */
+		'merge' : (function(){
+			// $.merge 유틸리티 메소드 $.origin.merge에 백업
+			$.origin       = $.origin || {};
+			$.origin.merge = $.merge;
+			// $.merge 재정의
+			return function() {
+				var args = arguments,
+					l    = args.length,
+					i    = 1;
+				for (; i<l; i++) {
+					if (args[i]) {
+						$.origin.merge(args[0], args[i]);
+					}
+				}
+				return args[0];
+			};
+		}()),
+
+	});
+
+
+	/**
+	 * --------------------------------
+	 * jQuery 인스턴스 메소드 오버라이딩
+	 * --------------------------------
+	 */
+	$.fn.extend({
+		/**
+		 * $.fn.css 오버라이딩
+		 * --------------------------------
+		 */
+		'css': (function(){
+			// $.fn.css 인스턴스 메소드 $.fn._css에 백업
+			$.fn._css = $.fn.css;
+			// $.fn.css 재정의
+			return function() {
+				var arg = arguments[0];
+				if ( typeof arg === 'string' && arg.match(/:/) && !arguments[1] ) {
+					$.each(this, function(index, el) {
+						el.style.cssText = arg;
+					});
+				} else if ( typeof arg === 'string' && !arguments[1] ) {
+					return $.fn._css.call(this, arg);
+				} else {
+					$.fn._css.apply(this, arguments);
+				}
+			};
+		})(),
+
+		/**
+		 * $.fn.attr 오버라이딩
+		 * --------------------------------
+		 */
+		'attr': (function(){
+			// $.fn.attr 인스턴스 메소드 $.fn._attr에 백업
+			$.fn._attr = $.fn.attr;
+			// $.fn.attr 재정의
+			return function() {
+				var arg = arguments[0];
+				if ( $.type(arg) === 'object' ) {
+					$.each(this, function(index, el) {
+						$.each(arg, function(prop, value) {
+							el.setAttribute(prop, value);
+						});
+					});
+				} else if ( typeof arg === 'string' && !arguments[1] ) {
+					return $.fn._attr.call(this, arg);
+				} else {
+					$.fn._attr.apply(this, arguments);
+				}
+			};
+		})(),
+
+	});
 
 });

@@ -1,0 +1,33 @@
+.skipNav-container a {
+	/*display: inline-block;*/
+	text-decoration: none;
+	padding: 0.1875rem 0.375rem;
+	background: #34C0FF;
+	color: #fff;
+	text-align: center;
+}
+
+.skipNav-container a:focus {
+	outline: none;
+}
+
+.a11y-hidden {
+	overflow: hidden;
+	position: absolute;
+	clip:     rect(0 0 0 0);
+	clip:     rect(0,0,0,0);
+	width:    1px;
+	height:   1px;
+	margin:   -1px;
+	padding:  0;
+	border:   0;
+}
+.a11y-hidden.focusable:focus,
+.a11y-hidden.focusable:active {
+	overflow: visible;
+	position: static;
+	clip:     auto;
+	width:    auto;
+	height:   auto;
+	margin:   0;
+}

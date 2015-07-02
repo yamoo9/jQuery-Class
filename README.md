@@ -1,401 +1,282 @@
 ## 웹 접근성을 고려한 jQuery 플러그인 제작 과정
 
-- [1일차 내용 요약](DOC/DAY01.md)
-- [2일차 내용 요약](DOC/DAY02.md)
-- [3일차 내용 요약](DOC/DAY03.md)
-- [4일차 내용 요약](DOC/DAY04.md)
-- [5일차 내용 요약](DOC/DAY05.md)
-- [6일차 내용 요약](DOC/DAY06.md)
-- [7일차 내용 요약](DOC/DAY07.md)
-- [8일차 내용 요약](DOC/DAY08.md)
-- [9일차 내용 요약](DOC/DAY09.md)
+- [01일차 내용 요약](DOC/DAY01.md)
+- [02일차 내용 요약](DOC/DAY02.md)
+- [03일차 내용 요약](DOC/DAY03.md)
+- [04일차 내용 요약](DOC/DAY04.md)
+- [05일차 내용 요약](DOC/DAY05.md)
+- [06일차 내용 요약](DOC/DAY06.md)
+- [07일차 내용 요약](DOC/DAY07.md)
+- [08일차 내용 요약](DOC/DAY08.md)
+- [09일차 내용 요약](DOC/DAY09.md)
+- [10일차 내용 요약](DOC/DAY10.md)
 
 ---
 
-### jQuery 플러그인 옵션 설정
+### 수업 시간에 다룰 내용
+- jQuery 사용자 정의 가상클래스 선택자 작성 (변경사항 중심)
+- jQuery 메소드 오버라이딩
+- jQuery skipNav, navigationMenu 플러그인 제작
+
+-
+
+### jQuery.expr.pseudos 확장
+
+사용자 정의 가상 선택자를 확장하는 `Sizzle` 엔진의 새로운 방법은 `jQuery.expr.createPseudo()` 메소드를 사용하는 것입니다. 이 메소드는 사용자가 직접 만든 가상 클래스 선택자에 메타 값을 입력할 경우만 사용하는데... 간단히 코드를 정리하면 다음과 같습니다.
+
 ```js
-/* js/plugins/jquery.dataLink.js
- * ---------------------------------------------------------------------------
+// jQuery.expr[':'] === jQuery.expr.pseudos
+$.ex = $.expr;
+$.ex[':'].btn = $.ex.createPseudo( function(meta){
+	return function(el) {
+		console.log(
+			'--- el ---\n', el,
+			'\n\n--- meta ---\n', meta
+		);
+	}
+} );
+```
+
+그리고 아래와 같이 명령을 입력하면...
+
+```js
+$('a:btn(play)');
+```
+
+콘솔에 다음과 같이 출력됩니다.
+
+```js
+--- el ---
+a
+
+--- meta ---
+play
+```
+
+그런데... 이런 방법을 어디에 사용하면 유용한걸까요?
+
+예를 들어 <a> 요소의 클래스 속성 값이 'btn' 이고,
+포함하는 문자열이 'play'인 요소를 찾고자 한다고 합시다.
+해당되는 대상을 손쉽게 찾고자 가상 선택자를 만들고자 한다면?
+아래와 같이 코드를 작성합니다.
+
+```js
+$.ex[':'].btn = $.ex.createPseudo( function(meta){
+	return function(el) {
+		return meta ?
+			el.className.match(/btn/ig) && (el.textContent || el.innerText) === meta :
+			el.className.match(/btn/ig);
+	}
+} );
+```
+
+그리고 난 후, 정의한 가상클래스 선택자 코드를 작성하여 실행하면 원하는 대상을 찾아줍니다.
+즉, 사용자가 원하는 형태로 가상 클래스 선택자를 확장할 수 있다는 것이죠.
+
+```js
+$('a:btn(play)'); // <a class="btn">play</a>
+```
+
+###
+
+```js
+$.expr.pseudos.focusable = function(el) {
+    el.focus(); // 요소에 포커스 설정
+    return el === $.activeElement(); // 요소에 포커스가 설정되었는지 확인
+};
+```
+
+---
+
+### jQuery 메소드 오버라이딩
+```js
+/**
+ * --------------------------------
+ * jQuery 유틸리티 메소드 오버라이딩
+ * --------------------------------
  */
-// 2개 이상 옵션(객체)을 합칩니다. [병합]
-// 객체 + 객체 [비교][속성이 다른것이 있으면 합치고][같은 속성이면 나중에 전달된 객체의 속성이 우선]
-var settings = $.extend({}, $.fn.dataLink.defaults, options);
-```
-
-#### jquery.dataLink.js 플러그인 코드
-```js
-/*! jquery.generate-dataLink-0.1.1.js © yamoo9.net, 2015 */
-define([
-	// 의존 모듈
-],
-function() {
-	'use strict';
-
-	// 플러그인 존재 유무 확인
-	if ( !$.fn.dataLink ) {
-
-		// 플러그인 정의
-		$.fn.dataLink = function(options, callback) {
-
-			var settings = $.extend({}, $.fn.dataLink.defaults, options);
-				$this    = this.filter( settings.filterExp );
-
-			// $() 인스턴스 집합에 개별적 플러그인 적용을 위한 $.each() 코드
-			return $.each($this, function(index, item) {
-
-					// 집합 내 개별 $() 인스턴스 객체 참조
-				var $item      = $this.eq(index),
-
-					// href 속성 참조
-					// link_path  = $item.attr('href'),
-					link_path  = item.getAttribute('href'),
-
-					// 외부 링크 속성 여부 확인
-					// RegExp를 활용한 방법: link_path.match(/^http:\/\//)
-					isExternal = link_path.indexOf('http://') > -1,
-
-					// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
-					linkFix    = isExternal && link_path.replace('http://', '');
-
-				// 플러그인이 적용되는 개별 $()인스턴스 객체가 참조하는 DOM 객체에 class 속성 설정
-				$item.addClass(settings.cNamePrefix + settings.cName);
-
-				// isExternal 값이 참이면 && 뒤 코드 실행 (거짓이면 실행 X)
-				// if ( isExternal ) {
-				// 	$item.attr('rel', 'external');
-				// }
-				isExternal && $item.attr('rel', 'external');
-				linkFix && $item.attr('data-linktext', linkFix);
-				settings.button && $item.attr('role', 'button');
-
-				// 플러그인 코드 종료 후에 실행되는 콜백함수
-				if ( callback && $.isFunction(callback) ) {
-					callback.call($item, settings);
-				}
-
-			});
-
-		};
-
-		/**
-		 * 플러그인 기본 옵션
-		 * 외부에서 접근가능하게 설정
-		 */
-		$.fn.dataLink.defaults = {
-			filterExp   : '[href]',
-			cNamePrefix : 'slide-',
-			cName       : 'shape-top',
-			button      : false
-		};
-
-
-	}
-});
-```
-
-#### jquery.skipNav.js 플러그인 코드
-
-```js
-define([
-	'jquery.utils',
-], function() {
-	'use strict';
-
+$.extend($, {
 	/**
-	 * 스킵 내비게이션을 적용
-	 * $().skipNav() 플러그인 역할 정의
-	 * ------------------------------------------------------------
-	 * <body> 바로 밑에 적용.
-	 * 문서에서 한 번만 사용됨.
-	 * 내부의 링크 아이템은 3~4개 정도 선으로 설정.
-	 * 웹 브라우저의 기본 동작을 차단.
-	 * 비 포커스 요소에 포커스 설정을 위한 tabindex=0 설정.
-	 * 블러 이벤트 발생 후, tabindex=-1 설정.
-	 * 뒤로가기 버튼을 적용했을 때, 메모리(URL 뒤에 붙는 hash) 설정
+	 * $.merge 오버라이딩
+	 * --------------------------------
 	 */
+	'merge' : (function(){
+		// $.merge 유틸리티 메소드 $.origin.merge에 백업
+		$.origin       = $.origin || {};
+		$.origin.merge = $.merge;
+		// $.merge 재정의
+		return function() {
+			var args = arguments,
+				l    = args.length,
+				i    = 1;
+			for (; i<l; i++) {
+				if (args[i]) {
+					$.origin.merge(args[0], args[i]);
+				}
+			}
+			return args[0];
+		};
+	}()),
 
-	// 플러그인 이름 설정
-	var plugin = 'skipNav';
+});
 
-	// 플러그인 존재 유무 확인
-	if( !$.fn[plugin] ) {
 
-		// 플러그인 정의
-		$.fn[plugin] = function(options, callback) {
-
-			// 플러그인 기본 + 사용자정의 옵션 병합
-			var settings = $.extend({}, $.fn[plugin].defaults, options);
-
-			// 플러그인이 적용된 $() 인스턴스 집합
-			var $this = this;
-
-			$this
-				// 식별자 class 속성 추가
-				.addClass( settings.container )
-
-				// 이벤트 위임
-				// $this 내부 a 요소에게만 callback 함수 적용
-				.on('click', 'a', function(e) {
-
-					// 브라우저 기본 동작 차단
-					e.preventDefault();
-
-					// 스킵 내비게이션 링크 아이템의 href 속성 참조
-					// var path = $.$(this).attr('href');
-					var path = e.target.getAttribute('href');
-
-					// 목적지 ID === path
-					// $.$() 개량 - DOM 요소 뿐만 아니라, 선택자도 적용 가능하도록 조치
-					// utils/jquery.utils.js 확인
-					var $target = $.$(path);
-
-					$target
-
-						// 목적지 요소에 접근성을 부여하기 위해
-						// 비 포커스 요소에 tabindex=0 속성을 정의합니다.
-						.attr('tabindex', 0)
-
-						// 포커스를 적용합니다.
-						.focus()
-
-						// 블러 이벤트가 발생하면 tabindex 속성을 -1로 변경합니다.
-						.on('blur', function() {
-							$target.attr('tabindex', -1);
-						});
-
-					// 뒤로가기 버튼을 적용했을 때, 메모리(URL 뒤에 붙는 hash) 설정
-					window.location.hash = path;
-
-					// callback 함수 전달 시, 플러그인 완료 후 callback 함수 실행
-					if ( callback && $.isFunction(callback) ) {
-						// callback() 함수 내부 this가 $target을 참조하도록 설정
-						// callback() 함수 내부에 전달되는 첫번째 인자 값을 settings로 설정
-						callback.call($target, settings);
-					}
-
+/**
+ * --------------------------------
+ * jQuery 인스턴스 메소드 오버라이딩
+ * --------------------------------
+ */
+$.fn.extend({
+	/**
+	 * $.fn.css 오버라이딩
+	 * --------------------------------
+	 */
+	'css': (function(){
+		// $.fn.css 인스턴스 메소드 $.fn._css에 백업
+		$.fn._css = $.fn.css;
+		// $.fn.css 재정의
+		return function() {
+			var arg = arguments[0];
+			if ( typeof arg === 'string' && arg.match(/:/) && !arguments[1] ) {
+				$.each(this, function(index, el) {
+					el.style.cssText = arg;
 				});
-
-
-			// 플러그인 적용 대상이 하나일 때, 체이닝 설정
-			return $this;
-
-		}
-
-		// 플러그인 기본 옵션 설정
-		$.fn[plugin].defaults = {
-			'container': 'skipNav-container'
+			} else if ( typeof arg === 'string' && !arguments[1] ) {
+				return $.fn._css.call(this, arg);
+			} else {
+				$.fn._css.apply(this, arguments);
+			}
 		};
-	}
+	})(),
+
+	/**
+	 * $.fn.attr 오버라이딩
+	 * --------------------------------
+	 */
+	'attr': (function(){
+		// $.fn.attr 인스턴스 메소드 $.fn._attr에 백업
+		$.fn._attr = $.fn.attr;
+		// $.fn.attr 재정의
+		return function() {
+			var arg = arguments[0];
+			if ( $.type(arg) === 'object' ) {
+				$.each(this, function(index, el) {
+					$.each(arg, function(prop, value) {
+						el.setAttribute(prop, value);
+					});
+				});
+			} else if ( typeof arg === 'string' && !arguments[1] ) {
+				return $.fn._attr.call(this, arg);
+			} else {
+				$.fn._attr.apply(this, arguments);
+			}
+		};
+	})(),
 
 });
 ```
 
-### jquery.utils.js 확장 코드
-```js
-define(['jquery'], function($) {
-	'use strict';
+---
 
-	/**
-	 * --------------------------------
-	 * jQuery.fx.speeds 확장
-	 * --------------------------------
-	 */
-	$.extend($.fx.speeds, {
-		'very-fast' : 100,
-		// 'fast'      : 200,
-		// 'normal'    : 400,
-		// 'slow'      : 600,
-		'very-slow' : 800,
-		'1s'        : 1000
-	});
+### jQuery Navigation Menu 플러그인 제작 고려사항
 
-	/**
-	 * --------------------------------
-	 * jQuery 유틸리티 메소드 확장
-	 * --------------------------------
-	 */
-	$.extend($, {
-
-		'version': $.fn.jquery,
-
-		'ex': $.expr[':'],
-
-		'selector': (function(){
-			if (document.querySelector) {
-				return function(selector) {
-					return document.querySelector(selector);
-				}
-			}
-		})(),
-
-		'selectorAll': (function(){
-			if (document.querySelectorAll) {
-				return function(selector) {
-					return document.querySelectorAll(selector);
-				}
-			}
-		})(),
-
-		'$': function(el) {
-			if (el.jquery) {el = el[0]; }
-			if (typeof el === 'string') {el = $.selector(el); }
-			if (!el || !el.nodeName) { throw new TypeError('타입오류: DOM객체 또는 $() 필요'); }
-			return $.data(el, 'this') || $.data(el, 'this', $(el));
-		},
-
-		'config': function(el, meta) {
-			return {
-				el    : $.$(el),
-				index : $.$(el).index(), // this.el.index()
-				meta  : $.expr.createPseudo ? meta : meta[3]
-			};
-		},
-
-		'$css': function(el, cssCode) {
-			if (el.jquery) {el = el[0]; }
-			if (!el.nodeName || typeof cssCode !== 'string') {
-				throw new TypeError('타입오류: 첫번째 인자 DOM객체 또는 $() 필요, 두번째 전달인자 문자 데이터 필요');
-			}
-			el.style.cssText += cssCode;
-			return $.$(el);
-		},
-
-		'activeElement': function() {
-			return document.activeElement;
-		},
-
-		'log': (function(){
-			if( console && console.log ) {
-				return function() {
-					console.log.apply(console, $.makeArray(arguments));
-				};
-			}
-		}()),
-
-		'group': (function(){
-			if( console && console.group ) {
-				return function(name) {
-					console.group(name);
-				};
-			}
-		})(),
-
-		'groupEnd': (function(){
-			if( console && console.groupEnd ) {
-				return function() {
-					console.groupEnd();
-				};
-			}
-		})(),
-
-		'time': (function(){
-			if( console && console.time ) {
-				return function(name) {
-					console.time(name);
-				};
-			}
-		})(),
-
-		'timeEnd': (function(){
-			if( console && console.timeEnd ) {
-				return function(name) {
-					console.timeEnd(name);
-				};
-			}
-		})(),
-
-	});
-
-	/**
-	 * --------------------------------
-	 * jQuery.expr[':'] 확장
-
-	 * The New Sizzle
-	 * http://blog.jquery.com/2012/07/04/the-new-sizzle/
-	 * https://github.com/jquery/sizzle/wiki#sizzleselectorspseudosname--function-elem--
-	 * https://github.com/jquery/sizzle/wiki#sizzleselectorscreatepseudofunction
-	 * --------------------------------
-	 */
-
-	$.extend($.ex, {
-
-		'icon': $.expr.createPseudo ?
-			$.expr.createPseudo(function(meta) {
-				return function(el) {
-					var cn = el.className.toLowerCase();
-					return meta ? (cn.match('icon-') && cn.match(meta) ) : cn.match('icon-');
-				}
-			}) :
-			function(el, index, meta) {
-				// return el.className.toLowerCase().match('icon-');
-				var _meta = meta[3],
-					cn = el.className.toLowerCase();
-				return _meta ? ( cn.match('icon-') && cn.match(_meta) ) : cn.match('icon-');
-			},
-
-		'debug': $.expr.createPseudo ?
-		$.expr.createPseudo(function(meta) {
-			return function(el) {
-				$.log(
-					'--- DEBUG ---',
-					'\nel: ', el,
-					'\nmeta: ', meta,
-					'\n--- // DEBUG ---'
-				);
-			};
-		}) :
-		function(el, index, meta) {
-			$.log(
-				'--- DEBUG ---',
-				'\nel: ', el,
-				'\nindex: ', index,
-				'\nmeta: ', meta[3],
-				'\n--- // DEBUG ---'
-			);
-		},
-
-		'nth-group': $.expr.createPseudo ?
-		$.expr.createPseudo(function(meta) {
-			return function(el) {
-				var config = $.config(el);
-				if(!meta || !$.isNumeric(meta)) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
-				return (config.index + 1) % meta === 0;
-			}
-		}) :
-		function(el, index, meta) {
-			var config = $.config(el, meta);
-			if(!config.meta) { throw new TypeError(':nth(3)처럼 () 안에 숫자 값을 넣어주세요.'); }
-			return (config.index + 1) % config.meta === 0;
-		},
-
-		'btn': $.expr.createPseudo ?
-		$.expr.createPseudo(function(meta) {
-			return function(el) {
-				return $.$(el).hasClass('btn') && config.el.data('btn', meta);
-			}
-		}) :
-		function(el, index, meta) {
-			var config = $.config(el, meta);
-			return config.el.hasClass('btn') && config.el.data('btn', config.meta);
-		}
-
-	});
-
-	/**
-	 * jQuery.expr[':'] 확장 - display
-	 * --------------------------------
-	 */
-	var filter = 'inline, inline-block, block, list-item'.split(', '),
-		k      = 0,
-		l      = filter.length;
-
-	for(; k<l; k++) {
-		(function(display_value){
-			$.ex[display_value] = function(el) {
-				return $.$(el).css('display') === display_value;
-			}
-		})(filter[k]);
-	}
-
-});
+##### 시멘틱 HTML 마크업
+```html
+<!-- nav 요소는 내비게이션 링크로 구성된 섹션을 의미합니다 - 내비게이션(Navigation) 역할 설정 -->
+<nav>
+	<!-- 메인 내비게이션 바 컨테이너 - 메뉴바(Menubar) 역할 설정 -->
+	<ul>
+		<!-- 레벨 1 - 프레젠테이션(Presentation) 역할 설정 -->
+		<li>
+			<!-- 하이퍼링크 - 메뉴 아이템(Menu Item) 역할 설정 -->
+			<a href></a>
+		</li>
+		<li>
+			<a href></a>
+			<!-- 레벨 2 메뉴 컨테이너 - 메뉴(Menu) 역할 설정 -->
+			<ul>
+				<!-- 레벨 2 - 프레젠테이션(Presentation) 역할 설정 -->
+				<li>
+					<!-- 하이퍼링크 - 메뉴 아이템(Menu Item) 역할 설정 -->
+					<a href></a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</nav>
 ```
+
+##### 스크린리더에 읽히는 콘텐츠 처리를 위한 클래스 설정
+```css
+.a11y-hidden {
+	overflow: hidden;
+	position: absolute;
+	clip:     rect(0 0 0 0);
+	clip:     rect(0,0,0,0);
+	width:    1px;
+	height:   1px;
+	margin:   -1px;
+	padding:  0;
+	border:   0;
+}
+
+.a11y-hidden.focusable:focus,
+.a11y-hidden.focusable:active {
+	overflow: visible;
+	position: static;
+	clip:     auto;
+	width:    auto;
+	height:   auto;
+	margin:   0;
+}
+```
+
+-
+
+##### 내비게이션 위젯에 접근성 향상을 위한 WAI-ARIA 적용
+[WAI-ARIA](http://www.w3.org/TR/wai-aria/)는 RIA 웹 애플리케이션의 취약한 접근성을 개선하기 위한 목적으로 개발된 표준 접근성 API로, Javascript를 사용하여 HTML 문서에 역할, 속성, 상태 등을 정의할 수 있습니다. 이를 통해 웹 제작자는 웹 애플리케이션의 접근성을 향상시킬 수 있습니다.
+
+- [WAI-ARIA 퀵 레퍼런스](http://www.w3.org/TR/wai-aria/appendices#quickref)
+- [사이트 글로벌 내비게이션 제작 가이드](http://www.w3.org/TR/wai-aria-practices/#Site_Navigator_General)
+
+-
+
+###### 역할(Roles) 설정
+- 내비게이션 요소(`<nav>` 또는 `<div>`)에 `role="navigation"` 역할 설정
+- 내비게이션 바 요소(`<ul>`)에 `role="menubar"` 역할 설정
+- 레벨 2 메뉴 컨테이너 요소(`<ul>`)에 `role="menu"` 역할 설정
+- 읽히지 않아야 할 요소 `<li>` 요소에 `role="presentation"` 역할 설정
+- 메뉴 아이템 요소(`<a>`)에 `role="menuitem"` 역할 설정
+
+-
+
+###### 속성(Properties) 설정
+- 서브 메뉴를 펼쳐 줄 `<a>` 요소에 `aria-haspopup="true"` 속성 설정
+- 레벨 2 `<ul>` 요소에 `aria-labelledby="<a>요소 ID 속성이름"` 속성 설정
+
+-
+
+###### 상태(States) 설정
+- ~~현재 활성화(선택된) 상태의 `<a>` 요소는 `aria-selected="true"`로 상태 변경<br>
+	반면 비활성화(선택되지 않은) 상태의 다른 `<a>` 요소는 `aria-selected="false"`로 상태 변경~~ [#참고](http://www.w3.org/TR/wai-aria/roles#menuitem)
+- 현재 활성화(선택된) 상태의 `<a>` 요소는 `aria-describedby="상태 설명글 ID"`로 상태 변경<br> 내비게이션 메뉴 영역 내부에 `<span>`을 생성한 후, `id="i11y-current-desc"` 속성을 설정하고 현재 활성화된 상태를 작성
+- 펼쳐진 상태의 `<ul>` 요소는 `aria-expanded="true"`로 상태 변경<br>
+	펼쳐지지 않은 상태의 `<ul>` 요소는 `aria-expanded="false"`로 상태 변경
+- 펼쳐진 상태의 `<ul>` 요소는 `aria-hidden="false"`로 상태 변경<br>
+	펼쳐지지 않은 상태의 `<ul>` 요소는 `aria-hidden="true"`로 상태 변경
+- 내비게이션 바 요소(`<ul>`)에 `aria-activedescendant="현재 포커스된 요소의 ID"`로 상태 변경
+- 현재 활성화(선택된) 상태의 `<a>` 요소는 `tabindex="0"`로 상태 변경<br>
+	반면 비활성화(선택되지 않은) 상태의 다른 `<a>` 요소는 `tabindex="-1"`로 상태 변경
+
+-
+
+###### 키보드(Keyboard) 설정 - [KWCAG 2.0, 운용의 용이성]
+키보드 | 역할
+--- | ---
+탭(`Tab`) | 순방향으로 포커스 이동
+시프트 탭(`Shift + Tab`) | 역방향으로 포커스 이동
+레프트 애로우(`←`) | 이전 내비게이션 바 아이템으로 포커스 이동
+라이트 애로우(`→`) | 다음 내비게이션 바 아이템으로 포커스 이동
+톱 애로우(`↑`) | 이전 내비게이션 바 아이템으로 포커스 이동 (옵션)
+바틈 애로우(`↓`) | 다음 내비게이션 바 아이템으로 포커스 이동 (옵션)
+엔터(`Enter`), 스페이스(`Space`) | 현재 포커스된 아이템 활성화

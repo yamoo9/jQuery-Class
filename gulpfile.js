@@ -1,10 +1,25 @@
-var gulp  = require('gulp'),
-	rjs   = require('gulp-requirejs');
+/**
+ * --------------------------------
+ * MODULES
+ * --------------------------------
+ */
+var gulp       = require('gulp'),
+	rjs        = require('gulp-requirejs'),
+	concatCss  = require('gulp-concat-css'),
+	prefixer   = require('gulp-autoprefixer'),
+	csso       = require('gulp-csso'),
+	sourcemaps = require('gulp-sourcemaps');
 
-var DIR = 'src';
+/**
+ * --------------------------------
+ * CONFIG
+ * --------------------------------
+ */
+var DIR = 'src/',
+	OUT = 'dist/',
+	BID = 'build/',
 
-gulp.task('rjs:build', function() {
-	rjs({
+	requireJSOpts = {
 		name                    : 'main',
 		// build/ 디렉토리 기준 설정
 		baseUrl                 : DIR + '/js',
@@ -24,6 +39,45 @@ gulp.task('rjs:build', function() {
 		preserveLicenseComments : false,
 		// require.js: shim 옵션 설정
 		shim    : {}
-	})
-	.pipe(gulp.dest(DIR + '/js/build/'));
+	};
+
+
+/**
+ * --------------------------------
+ * DEFAULT / WATCH / BUILD
+ * --------------------------------
+ */
+gulp.task('default', ['css']);
+
+gulp.task('watch', function() {
+	gulp.watch( DIR + 'css/**/*.css', ['css'] );
+});
+
+gulp.task('build', ['build:css', 'build:rjs']);
+
+
+/**
+ * --------------------------------
+ * TASK
+ * --------------------------------
+ */
+// CSS 병합
+gulp.task('css', function() {
+	gulp.src( [DIR + 'css/style.css', '!' + DIR + 'css/out/*.css'] )
+		.pipe( concatCss('all.css') )
+		.pipe( prefixer() )
+		.pipe( gulp.dest( DIR + 'css/out' ) );
+});
+
+// CSS 압축
+gulp.task('build:css', function() {
+	gulp.src( DIR + 'css/out/*.css' )
+		.pipe( csso() )
+		.pipe( gulp.dest(DIR + BID) );
+});
+
+// [AMD] r.js 최적화
+gulp.task('build:rjs', function() {
+	rjs( requireJSOpts )
+	.pipe(gulp.dest(DIR + BID));
 });

@@ -1,4 +1,4 @@
-require.config({
+var require = {
 
 	baseUrl: 'js',
 
@@ -23,6 +23,4 @@ require.config({
 
 	urlArgs : 'ts=' + (new Date()).getTime()
 
-});
-
-require(['init']);
+};
