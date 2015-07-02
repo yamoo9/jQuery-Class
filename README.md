@@ -101,9 +101,8 @@ $.extend($, {
 	 * --------------------------------
 	 */
 	'merge' : (function(){
-		// $.merge 유틸리티 메소드 $.origin.merge에 백업
-		$.origin       = $.origin || {};
-		$.origin.merge = $.merge;
+		// $.merge 유틸리티 메소드 백업
+		var originMerge = $.merge;
 		// $.merge 재정의
 		return function() {
 			var args = arguments,
@@ -111,7 +110,7 @@ $.extend($, {
 				i    = 1;
 			for (; i<l; i++) {
 				if (args[i]) {
-					$.origin.merge(args[0], args[i]);
+					originMerge(args[0], args[i]);
 				}
 			}
 			return args[0];
@@ -133,7 +132,7 @@ $.fn.extend({
 	 */
 	'css': (function(){
 		// $.fn.css 인스턴스 메소드 $.fn._css에 백업
-		$.fn._css = $.fn.css;
+		var originCss = $.fn.css;
 		// $.fn.css 재정의
 		return function() {
 			var arg = arguments[0];
@@ -142,9 +141,9 @@ $.fn.extend({
 					el.style.cssText = arg;
 				});
 			} else if ( typeof arg === 'string' && !arguments[1] ) {
-				return $.fn._css.call(this, arg);
+				return originCss.call(this, arg);
 			} else {
-				$.fn._css.apply(this, arguments);
+				originCss.apply(this, arguments);
 			}
 		};
 	})(),
@@ -155,7 +154,7 @@ $.fn.extend({
 	 */
 	'attr': (function(){
 		// $.fn.attr 인스턴스 메소드 $.fn._attr에 백업
-		$.fn._attr = $.fn.attr;
+		var originAttr = $.fn.attr;
 		// $.fn.attr 재정의
 		return function() {
 			var arg = arguments[0];
@@ -166,10 +165,11 @@ $.fn.extend({
 					});
 				});
 			} else if ( typeof arg === 'string' && !arguments[1] ) {
-				return $.fn._attr.call(this, arg);
+				return originAttr.call(this, arg);
 			} else {
-				$.fn._attr.apply(this, arguments);
+				originAttr.apply(this, arguments);
 			}
+			originAttr = null;
 		};
 	})(),
 
