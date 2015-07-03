@@ -269,10 +269,8 @@ function($) {
 					$.each(this, function(index, el) {
 						el.style.cssText = arg;
 					});
-				} else if ( typeof arg === 'string' && !arguments[1] ) {
-					return originCss.call(this, arg);
 				} else {
-					originCss.apply(this, arguments);
+					return originCss.apply(this, arguments);
 				}
 			};
 		})(),
@@ -293,12 +291,9 @@ function($) {
 							el.setAttribute(prop, value);
 						});
 					});
-				} else if ( typeof arg === 'string' && !arguments[1] ) {
-					return originAttr.call(this, arg);
 				} else {
-					originAttr.apply(this, arguments);
+					return originAttr.apply(this, arguments);
 				}
-				originAttr = null;
 			};
 		})(),
 
