@@ -6,7 +6,10 @@ function() {
 
 	// $.skipNav() 사용법
 	// skipNav()를 적용할 콘테이너 요소 선택자 전달
-	$('#skip-menu').skipNav();
+	$('#skip-menu').skipNav({
+		setHash: false,
+		setContainerFocuing: false,
+	});
 
 
 	// 새로운 가상클래스 선택자를 정의
