@@ -38,6 +38,26 @@ p {
 	color: #faced2;
 }
 
+a {
+	text-decoration: none;
+	padding-bottom: 0.05rem;
+	border-bottom: 1px dashed;
+}
+
+a:focus {
+	outline: 4px solid hsla(50, 100%, 50%, 1);
+	border-bottom: 0;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	padding-top: .3rem;
+	padding-bottom: .3rem;
+}
+
 .container {
 	max-width: 640px;
 	max-width: 40rem;
@@ -54,4 +74,39 @@ p {
 [id*='art-'] h2 {
 	margin-bottom: 16px;
 	margin-bottom: 1rem;
+}
+
+nav ul {
+	list-style-type: none;
+	margin: 0;
+	padding-left: 0;
+	background: #fff;
+	color: #000;
+	margin-bottom: 1rem;
+	padding: 1rem;
+	border-radius: 3px;
+}
+
+nav ul::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+nav li {
+	float: left;
+	margin-right: 1.3rem;
+	margin-bottom: 0.3rem;
+}
+
+nav a {
+	text-decoration: none;
+	border-bottom: none;
+}
+
+nav a:hover,
+nav a:focus {
+	outline: none;
+	color: #FC414B;
+	font-weight: bold;
 }

@@ -65,6 +65,7 @@ define([
 						.on('blur', function() {
 							$target.attr('tabindex', -1);
 						});
+
 					// 뒤로가기 버튼을 적용했을 때, 메모리(URL 뒤에 붙는 hash) 설정
 					window.location.hash = path;
 

@@ -1,33 +1,67 @@
 .skipNav-container a {
-	/*display: inline-block;*/
-	text-decoration: none;
-	padding: 0.1875rem 0.375rem;
-	background: #34C0FF;
+	display: block;
+	padding: 0.4rem 0.375rem;
 	color: #fff;
-	text-align: center;
+	background: #34c0ff;
+	font-family: Verdana;
+	font-variant: small-caps;
+	text-decoration: none;
+	text-shadow: 0 0 10px #fff;
 }
 
 .skipNav-container a:focus {
 	outline: none;
+	box-shadow: 0px 2px 3px hsla(0, 0%, 0%, .25);
+}
+
+.skipNav-container a:nth-child(1n):focus {
+	background: #2c9da7;
+	background-image: linear-gradient(#2c9da7, #ad4125);
+}
+
+.skipNav-container a:nth-child(2n):focus {
+	background: #046380;
+	background-image: linear-gradient(#046380, #c45e4c);
+}
+
+.skipNav-container a:nth-child(3n):focus {
+	background: #e30816;
+	background-image: linear-gradient(#e30816, #f65167);
+}
+
+.skipNav-container a:nth-child(4n):focus {
+	background: #bd8d46;
+	background-image: linear-gradient(#bd8d46, #e43d38);
+}
+
+.skipNav-container a:nth-child(5n):focus {
+	background: #171411;
+	background-image: linear-gradient(#171411, #6f4546);
+}
+
+.skipNav-container a:nth-child(6n):focus {
+	background: #fd8d0e;
+	background-image: linear-gradient(#fd8d0e, #f85f56);
 }
 
 .a11y-hidden {
 	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip: rect(0, 0, 0, 0);
 	position: absolute;
-	clip:     rect(0 0 0 0);
-	clip:     rect(0,0,0,0);
-	width:    1px;
-	height:   1px;
-	margin:   -1px;
-	padding:  0;
-	border:   0;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	border: 0;
+	padding: 0;
 }
+
 .a11y-hidden.focusable:focus,
 .a11y-hidden.focusable:active {
 	overflow: visible;
+	clip: auto;
 	position: static;
-	clip:     auto;
-	width:    auto;
-	height:   auto;
-	margin:   0;
+	width: auto;
+	height: auto;
+	margin: 0;
 }
