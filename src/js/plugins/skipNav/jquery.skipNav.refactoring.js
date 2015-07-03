@@ -20,10 +20,14 @@ function() {
 		'controls': function() {
 			// 클래스 설정
 			this.$el.addClass(this.settings.containerClass);
-			this.$links.addClass(this.settings.linkClasses.hidden + ' ' + this.settings.linkClasses.focusable);
+			this.$links
+				.addClass(this.settings.linkClasses.hidden + ' ' + this.settings.linkClasses.focusable)
+				.attr('aria-hidden', true);
 		},
 		'events': function() {
-			this.$el.on('click', 'a', $.proxy(this.linksAction, this));
+			this.$el
+				.on('click', 'a', $.proxy(this.linksAction, this))
+				.on('focusin focusout', 'a', this.toggleHidden);
 		},
 		'linksAction': function(e) {
 			e.preventDefault();
@@ -44,6 +48,14 @@ function() {
 		'setTabIndexMinus': function() {
 			// console.log(this); // _skipNav 객체
 			this.attr('tabindex', -1);
+		},
+		'toggleHidden': function(e) {
+			var $link = $.$(this);
+			if (e.type === 'focusin') {
+				$link.attr('aria-hidden', false);
+			} else {
+				$link.attr('aria-hidden', true);
+			}
 		}
 	};
 
