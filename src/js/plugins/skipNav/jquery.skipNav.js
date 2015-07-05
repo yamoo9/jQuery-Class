@@ -52,22 +52,41 @@ define([
 					// utils/jquery.utils.js 확인
 					var $target = $.$(path);
 
-					$target
+					// $target은 컨테이너 요소입니다.
+					// 만약 settings.setContainerFocuing 조건이 참이면...
+					if( settings.setContainerFocuing ) {
 
-						// 목적지 요소에 접근성을 부여하기 위해
-						// 비 포커스 요소에 tabindex=0 속성을 정의합니다.
-						.attr('tabindex', 0)
+						$target
 
-						// 포커스를 적용합니다.
-						.focus()
+							// 목적지 요소에 접근성을 부여하기 위해
+							// 비 포커스 요소에 tabindex=0 속성을 정의합니다.
+							.attr('tabindex', 0)
 
-						// 블러 이벤트가 발생하면 tabindex 속성을 -1로 변경합니다.
-						.on('blur', function() {
-							$target.attr('tabindex', -1);
-						});
+							// 포커스를 적용합니다.
+							.focus()
+
+							// 블러 이벤트가 발생하면 tabindex 속성을 -1로 변경합니다.
+							.on('blur', function() {
+								$target.attr('tabindex', -1);
+							});
+
+					}
+					// 하지만 거짓이라면...
+					else {
+
+						$target.find('*:focusable').eq(0).focus();
+
+					}
+
+
+
+
 					// 뒤로가기 버튼을 적용했을 때, 메모리(URL 뒤에 붙는 hash) 설정
-					window.location.hash = path;
-
+					// settings.setHash 값이 참일 때만 아래 코드를 수행하라.
+					// if ( settings.setHash ) {
+					// 	window.location.hash = path;
+					// }
+					settings.setHash && (window.location.hash = path);
 				});
 
 			// 플러그인이 적용된 내부의 a 요소는 화면에 감춰진 상태의 class 속성이 부여된다.
@@ -93,7 +112,9 @@ define([
 			'linkClasses': {
 				'hidden': 'a11y-hidden',
 				'focusable': 'focusable'
-			}
+			},
+			'setHash': true,
+			'setContainerFocuing': true
 		};
 	}
 

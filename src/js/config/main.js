@@ -9,7 +9,7 @@ require.config({
 		'jquery.utils'    : 'utils/jquery.utils',
 		// Plugins
 		'jquery.dataLink' : 'plugins/dataLink/jquery.dataLink',
-		'jquery.skipNav'  : 'plugins/skipNav/jquery.skipNav',
+		'jquery.skipNav'  : 'plugins/skipNav/jquery.skipNav.refactoring',
 	},
 
 	shim: {

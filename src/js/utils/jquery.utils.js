@@ -273,29 +273,7 @@ function($) {
 					return originCss.apply(this, arguments);
 				}
 			};
-		})(),
-
-		/**
-		 * $.fn.attr 오버라이딩
-		 * --------------------------------
-		 */
-		'attr': (function(){
-			// $.fn.attr 인스턴스 메소드 $.fn._attr에 백업
-			var originAttr = $.fn.attr;
-			// $.fn.attr 재정의
-			return function() {
-				var arg = arguments[0];
-				if ( $.type(arg) === 'object' ) {
-					$.each(this, function(index, el) {
-						$.each(arg, function(prop, value) {
-							el.setAttribute(prop, value);
-						});
-					});
-				} else {
-					return originAttr.apply(this, arguments);
-				}
-			};
-		})(),
+		})()
 
 	});
 
