@@ -47,7 +47,7 @@
 	- `urlArgs`
 
 5. **사용자정의 플러그인/라이브러리 추가**
-	- `jquery.utils.js` 등
+	- [`jquery.utils.js`](src/js/utils/jquery.utils.js) 등
 
 6. **플러그인 폴더/파일 생성**
 	- `js/plugins/`
