@@ -139,8 +139,15 @@ function() {
 });
 ```
 
+-
+
 ### Google 클로저 컴파일러 서비스 (Closure Compiler Service)
+
+성능 향상을 목적으로 여러 개의 자바스크립트 파일을 병합하여 최적화
+
 [Closure Compiler](http://closure-compiler.appspot.com/home)
+
+-
 
 ### Cordova - Android v4.1 viewport scaling
 
