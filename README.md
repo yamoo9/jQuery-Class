@@ -16,6 +16,7 @@
 ---
 
 ## 과정 복습
+
 1. **프로젝트 폴더 생성**
 	```sh
 	.
@@ -89,3 +90,29 @@
 	- [gitHub](http://github.com/) 본인 계정에 `Publish` 또는 `Sync`
 	- 버전 관리 및 버그 수정
 	- 기능 추가
+
+---
+
+### 내비게이션바 jQuery 플러그인 제작
+
+#### 참고 URL
+
+###### 국내
+- [OCN](http://ch.interest.me/ocn)
+- [daumkakao](http://www.daumkakao.com/main)
+- [privacy.daumkakao](http://privacy.daumkakao.com/main)
+- [KIPFA](http://www.kipfa.or.kr/)
+- [홈플러스](http://direct.homeplus.co.kr/)
+- [위메프](http://www.wemakeprice.com/)
+- [콘텐츠코리아랩](https://www.ckl.or.kr:446/www/main/userMain/main.do)
+
+###### 국외
+- [jquery](http://jquery.com/)
+- [phonegap](http://phonegap.com/)
+- [cordova](https://cordova.apache.org/)
+- [angularjs](https://www.angularjs.org/)
+- [goal.com](http://www.goal.com/en/)
+- [forbes](http://www.forbes.com/)
+
+#### 내비게이션 제작을 위한 고려사항
+[접근성/사용성 높은 내비게이션 제작 방법](/DOC/DAY11.md#내비게이션-위젯에-접근성-향상을-위한-wai-aria-적용)
