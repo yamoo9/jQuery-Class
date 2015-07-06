@@ -80,7 +80,7 @@
 	// 테스트 모듈 정의
 	QUnit.module();
 	// 테스트
-	QUnit.test(function(assert){
+	QUnit.test('테스트 메시지', function(assert){
 		assert.ok(); // equal(), strictEqual();
 	});
 	```
