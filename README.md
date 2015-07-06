@@ -55,7 +55,7 @@
 	- `js/plugins/jquery.{{plugin}}.css` (플러그인 테마 파일: 옵션)
 
 7. **플러그인 코드 준비**
-	- AMD `define()` 코드 작성 및 의존성 관리
+	- AMD `define()` 코드 작성 및 의존성 관리 (jQuery UI 팀 ─ RequireJs/AMD 사용 [#](http://learn.jquery.com/jquery-ui/environments/amd/))
 	- 플러그인 존재 유무 조건문 작성 `!jquery.{{plugin}}`
 	- `jQuery.prototype` 인스턴스 메소드 확장 플러그인 코드 작성
 	- 플러그인 함수 내, this 객체 참조 (this === jQuery 인스턴스 객체)
