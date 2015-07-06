@@ -11,162 +11,81 @@
 - [09일차 내용 요약](DOC/DAY09.md)
 - [10일차 내용 요약](DOC/DAY10.md)
 - [11일차 내용 요약](DOC/DAY11.md)
+- [12일차 내용 요약](DOC/DAY12.md)
 
 ---
 
-## OOJS 스타일로 리팩토링([ReFactoring](https://ko.wikipedia.org/wiki/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81))
+## 과정 복습
+1. **프로젝트 폴더 생성**
+	```sh
+	.
+	├── css
+	│   └── style.css
+	├── images
+	├── index.html
+	└── js
+	    └── index.js
+	```
 
-```js
-define([
-	'jquery.utils',
-],
-function() {
-	'use strict';
+2. **라이브러리 폴더 생성 및 다운로드**
+	- `js/libs/` 폴더 생성
+	- [Modernizr](http://modernizr.com/)
+	- [Detectizr](https://github.com/barisaydinoglu/Detectizr/)
+	- [RequireJS](http://requirejs.org/)
+	- [jQuery](https://jquery.com/)
 
-	// 플러그인 이름
-	var plugin = 'skipNav';
+3. **RequireJS 활용 준비**
+	- `require.js` 호출
+	- `data-main` 속성에 메인 자바스크립트(`main.js`) 설정
 
-	// 플러그인에 적용될 객체
-	var _skipNav = {
+4. **RequireJS 환경 설정**
+	- `baseUrl`
+	- `paths`
+	- `shim`
+	- `waitSeconds`
+	- `urlArgs`
 
-		// 초기화 수행
-		'init': function($el, options, callback) {
-			// 플러그인 적용 요소 참조
-			this.$el      = $el.eq(0);
-			this.$links   = this.$el.find('a');
-			// 옵션 설정
-			this.settings = $.extend(true, {}, $.fn[plugin].defaults, options);
-			// 객체 멤버 메소드 실행
-			this.controls();
-			this.events();
-			// 객체 리턴
-			return this;
-		},
+5. **사용자정의 플러그인/라이브러리 추가**
+	- `jquery.utils.js` 등
 
-		// 객체 컨트롤
-		'controls': function() {
-			// 요소에 클래스 속성 설정
-			this.$el.addClass(this.settings.containerClass);
-			this.$links
-				.addClass(this.settings.linkClasses.hidden + ' ' + this.settings.linkClasses.focusable)
-				// WAI-ARIA 상태 속성 적용
-				.attr('aria-hidden', true);
-		},
+6. **플러그인 폴더/파일 생성**
+	- `js/plugins/`
+	- `js/plugins/jquery.{{plugin}}.js`
+	- `js/plugins/jquery.{{plugin}}.css` (플러그인 테마 파일: 옵션)
 
-		// 객체 이벤트
-		'events': function() {
-			this.$el
-				// 클릭 이벤트
-				// $.proxy() 유틸리티 메소드를 활용한 콘텍스트 설정
-				.on('click', 'a', $.proxy(this.linksAction, this))
-				// 포커스/블러 이벤트
-				.on('focusin focusout', 'a', this.toggleHidden);
-		},
+7. **플러그인 코드 준비**
+	- AMD `define()` 코드 작성 및 의존성 관리
+	- 플러그인 존재 유무 조건문 작성 `!jquery.{{plugin}}`
+	- `jQuery.prototype` 인스턴스 메소드 확장 플러그인 코드 작성
+	- 플러그인 함수 내, this 객체 참조 (this === jQuery 인스턴스 객체)
+	- jQuery 구문 체이닝을 위한 `return` 처리 (복수 적용일 경우, `$.each()` 활용)
+	- 플러그인 기본 옵션 및 사용자 정의 설정 덮어쓰기 설정 (`$.extend()` 활용)
 
-		// 클릭 이벤트 핸들러
-		'linksAction': function(e) {
-			// 브라우저 기본동작 차단
-			e.preventDefault();
-			// href 속성 값을 path 변수에 참조
-			var path = e.target.getAttribute('href');
-			// 목적지 대상(콘테이너 요소) 탐색
-			// $.$() 유틸리티 메소드를 활용한 캐시 데이터 활용
-			var $target = $.$(path);
-			// 옵션 체크를 통해 조건 분기
-			if( this.settings.setContainerFocuing ) {
-				$target
-					// 비 포커스 요소에 tabindex 속성 설정
-					.attr('tabindex', 0)
-					.focus()
-					.on('blur', $.proxy(this.setTabIndexMinus, $target));
+8. **플러그인 코드 디자인**
+	- 구현하고자 하는 플러그인 기능 목록 정리
+	- `접근성`/`사용성`/`성능`을 고려하여 플러그인 코드 작성
 
-			} else {
-				$target.find('*:focusable').eq(0).focus();
-			}
-			// 옵션 체크를 통해 조건문 실행
-			this.settings.setHash && (window.location.hash = path);
-		},
+9. **플러그인 코드 리팩토링**
+	- 절차지향 방식 코드로 작성한 경우, 객체지향 코드로 전환 (객체지향을 선호한다면: 옵션)
+	- 작성된 코드에서 수정되거나, 정리될 구문을 찾아 변경
 
-		// tabindex 속성 상태 변경
-		'setTabIndexMinus': function() {
-			// console.log(this); // _skipNav 객체
-			this.attr('tabindex', -1);
-		},
+10. **플러그인 테스트**
+	- `test/` 폴더 및 `test/test.js` 파일 생성
+	- TDD 방식의 QUnit 도구 호출
+		- `test/qunit/qunit.js`
+		- `test/qunit/qunit.css`
+	- 테스트 코드 작성
+		```js
+		QUnit.module();
+		QUnit.test(function(assert){
+			assert.ok(); // equal(), strictEqual();
+		});
+		```
 
-		// 포커스 이벤트 핸들러
-		// WAI-ARIA 상태 변경
-		'toggleHidden': function(e) {
-			var $link = $.$(this);
-			// 이벤트 타입을 체크하여 코드 분기 (상태 변경)
-			if (e.type === 'focusin') {
-				$link.attr('aria-hidden', false);
-			} else {
-				$link.attr('aria-hidden', true);
-			}
-		}
-	};
+11. **플러그인 빌드**
+	- 개발용 플러그인 코드로부터 배포용 플러그인 코드로 빌드
 
-
-	// 플러그인 존재 유무 확인
-	if( !$.fn[plugin] ) {
-
-		// 플러그인 정의
-		$.fn[plugin] = function(options, callback) {
-
-			// _skipNav 객체 초기화 수행
-			var __skipNav = _skipNav.init(this, options, callback);
-
-			// _skipNav 객체 재 접근을 위한 데이터 참조 처리
-			this.data('_skipNav', __skipNav);
-
-			// jQuery 체이닝을 위한 인스턴스 리턴
-			return this;
-
-		};
-
-		// 플러그인 초기 옵션 값 설정
-		$.fn[plugin].defaults = {
-			'containerClass': 'skipNav-container',
-			'linkClasses': {
-				'hidden': 'a11y-hidden',
-				'focusable': 'focusable'
-			},
-			'setHash': true,
-			'setContainerFocuing': true
-		};
-	}
-
-});
-```
-
--
-
-### Google 클로저 컴파일러 서비스 (Closure Compiler Service)
-
-성능 향상을 목적으로 여러 개의 자바스크립트 파일을 병합하여 최적화
-
-[Closure Compiler](http://closure-compiler.appspot.com/home)
-
--
-
-### Cordova - Android v4.1 viewport scaling
-
-<!-- http://stackoverflow.com/questions/24636515/android-4-1-viewport-scaling-setinitialscale-meta-initial-scale-not-working -->
-
-Cordova를 활용해 제작한 모바일 앱이 Android 기기에서 `<meta>` 요소의 initial-scale 속성이 적용되지 않는 문제
-
-**`<meta>` 설정이 적용되지 않는 문제**
-```html
-<meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-```
-
-**사용자정의 함수를 활용한 해결책**
-```js
-// Android <= 4.2 chromium 기반의 4.2+ 웹뷰에서 모두 동작함.
-function customScaleThisScreen()
-	var contentWidth = document.body.scrollWidth,
-		windowWidth  = window.innerWidth,
-		newScale     = windowWidth / contentWidth;
-	document.body.style.zoom = newScale;
-}
-```
+12. **플러그인 배포**
+	- [gitHub](http://github.com/) 본인 계정에 `Publish` 또는 `Sync`
+	- 버전 관리 및 버그 수정
+	- 기능 추가
