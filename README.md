@@ -148,12 +148,12 @@ function() {
 
 Cordova를 활용해 제작한 모바일 앱이 Android 기기에서 `<meta>` 요소의 initial-scale 속성이 적용되지 않는 문제
 
-** `<meta>` 설정이 적용되지 않는 문제 **
+**`<meta>` 설정이 적용되지 않는 문제**
 ```html
 <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 ```
 
-** 사용자정의 함수를 활용한 해결책 **
+**사용자정의 함수를 활용한 해결책**
 ```js
 // Android <= 4.2 chromium 기반의 4.2+ 웹뷰에서 모두 동작함.
 function customScaleThisScreen()
