@@ -76,12 +76,14 @@
 		- `test/qunit/qunit.js`
 		- `test/qunit/qunit.css`
 	- 테스트 코드 작성
-		```js
-		QUnit.module();
-		QUnit.test(function(assert){
-			assert.ok(); // equal(), strictEqual();
-		});
-		```
+	```js
+	// 테스트 모듈 정의
+	QUnit.module();
+	// 테스트
+	QUnit.test(function(assert){
+		assert.ok(); // equal(), strictEqual();
+	});
+	```
 
 11. **플러그인 빌드**
 	- 개발용 플러그인 코드로부터 배포용 플러그인 코드로 빌드
